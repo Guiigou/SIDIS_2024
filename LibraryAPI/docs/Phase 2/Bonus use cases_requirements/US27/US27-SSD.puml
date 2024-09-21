@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Reader" as Reader
+participant ":System" as System
+
+activate Reader
+
+Reader -> System: Requests to search books by author
+activate System
+System -> System: Retrieve books by the specified author
+System --> Reader: Display list of books by the specified author
+
+deactivate System
+@enduml

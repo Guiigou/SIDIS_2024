@@ -1,0 +1,55 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class ReaderController {
+    + getReaderProfileWithQuote(id: Long): ResponseEntity<ReaderProfileView>
+}
+
+class ReaderServiceImpl {
+    + getReaderByIdWithQuote(id: Long): Optional<Reader>
+}
+
+interface ReaderRepository <<interface>> {
+    + findReaderById(id: Long): Optional<Reader>
+}
+
+class ReaderProfileViewMapper {
+    + toReaderProfileView(reader: Reader): ReaderProfileView
+}
+
+class ReaderProfileView {
+    - id: Long
+    - readerCode: String
+    - name: String
+    - email: String
+    - age: int
+    - phoneNumber: String
+    - GDBRConsent: boolean
+    - funnyQuote: String
+    - interests: List<String>
+}
+
+class Reader {
+    - id: Long
+    - readerCode: String
+    - name: String
+    - email: String
+    - age: int
+    - phoneNumber: String
+    - GDBRConsent: boolean
+    - funnyQuote: String
+    - interests: List<String>
+    + getFunnyQuote(): String
+}
+
+ReaderController ..> ReaderServiceImpl : uses
+ReaderServiceImpl ..> ReaderRepository : uses
+ReaderController ..> ReaderProfileViewMapper : uses
+ReaderProfileViewMapper ..> Reader
+ReaderProfileViewMapper ..> ReaderProfileView
+ReaderRepository ..> Reader
+
+@enduml

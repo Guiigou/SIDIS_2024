@@ -1,0 +1,33 @@
+@startuml
+
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+participant "Librarian:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":BookController" as Ctrl
+participant "service:BookService" as Service
+participant "mapper:GenreViewMapper" as Mapper
+participant "repo:BookRepository" as Repo
+participant "result:HttpResult" as Result
+
+activate HTTPClient
+
+HTTPClient -> System: GET /books/top-genres
+System -> Ctrl: getTopGenres()
+Ctrl -> Service: getTopGenres()
+Service -> Repo: findTopGenres()
+Repo --> Service: topGenres
+Service -> Repo: findAll()
+Repo --> Service: List<Book>
+Service --> Ctrl: topGenres, List<Book>
+Ctrl -> Mapper: toGenreView(topGenres, List<Book>)
+Mapper --> Ctrl: genreViews
+Ctrl --> Result**: create(200, genreViews)
+Ctrl --> System: result
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+
+@enduml

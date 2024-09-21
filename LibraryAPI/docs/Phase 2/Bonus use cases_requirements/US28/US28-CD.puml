@@ -1,0 +1,53 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+class ReaderController {
+    + getReaders(phoneNumber: String, email: String, name: String, page: int, size: int): Iterable<ReaderView>
+}
+
+class ReaderService {
+    + getReadersByPhoneNumber(phoneNumber: String, pageable: Pageable): Page<Reader>
+    + updateAge(readers: List<Reader>)
+    + toPage(readers: List<Reader>, pageable: Pageable): Page<Reader>
+}
+
+interface ReaderRepository <<interface>> {
+    + findAll(): List<Reader>
+    + findAll(pageable: Pageable): Page<Reader>
+}
+
+class ReaderViewMapper {
+    + toReaderView(reader: Reader): ReaderView
+}
+
+class ReaderView {
+    - id: Long
+    - readerCode: String
+    - name: String
+    - email: String
+    - age: Integer
+    - phoneNumber: String
+    - GDBRConsent: Boolean
+    - interests: List<String>
+}
+
+class Reader {
+    - id: Long
+    - readerCode: String
+    - name: String
+    - email: String
+    - age: Integer
+    - phoneNumber: String
+    - GDBRConsent: Boolean
+    - interests: List<String
+}
+
+ReaderController ..> ReaderService : uses
+ReaderService ..> ReaderRepository : uses
+ReaderController ..> ReaderViewMapper : uses
+ReaderViewMapper ..> Reader
+ReaderViewMapper ..> ReaderView
+ReaderRepository ..> Reader : retrieves
+
+@enduml

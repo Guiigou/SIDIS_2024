@@ -1,0 +1,46 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class User {
+    - id
+    - modifiedBy
+    - createdBy
+    - username
+    - password
+    - fullName
+}
+
+class Role {
+    - READER
+    - authority
+}
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+    - interests
+}
+
+class ReaderPhoto{
+    - id
+    - image
+    - contentType
+}
+
+
+Anonymous -down- User : registers as >
+User <|-- Reader : is a <
+Reader *-- dateOfBirth : has a >
+Reader *-- ReaderPhoto : has a >
+User "1" -left- "1" Role
+
+
+
+@enduml

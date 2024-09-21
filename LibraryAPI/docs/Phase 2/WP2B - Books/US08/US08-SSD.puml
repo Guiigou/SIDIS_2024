@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Reader" as Reader
+participant ":System" as System
+activate Reader
+
+Reader -> System: Requests to search a book by title
+activate System
+System -> System: Retrieves book by title
+System --> Reader: Displays the book with\nthe corresponding title
+deactivate System
+@enduml

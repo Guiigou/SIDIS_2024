@@ -1,0 +1,32 @@
+@startuml
+actor Librarian
+autonumber
+
+Librarian -> ReaderController: GET /api/readers?email={email}
+activate ReaderController
+
+ReaderController -> ReaderService: getReadersByEmail(email, pageable)
+activate ReaderService
+
+ReaderService -> ReaderRepository: findAll()
+activate ReaderRepository
+ReaderRepository --> ReaderService: List<Reader> readers
+deactivate ReaderRepository
+
+ReaderService -> Reader: filter by email
+Reader --> ReaderService: List<Reader> filteredReaders
+
+ReaderService -> ReaderService: updateAge(filteredReaders)
+ReaderService -> ReaderService: apply pagination
+ReaderService --> ReaderController: Page<Reader> readersPage
+deactivate ReaderService
+
+ReaderController -> ReaderViewMapper: toReaderView(readersPage)
+activate ReaderViewMapper
+ReaderViewMapper --> ReaderController: List<ReaderView> readerViews
+deactivate ReaderViewMapper
+
+ReaderController --> Librarian: HTTP 200 OK (List<ReaderView> readerViews)
+deactivate ReaderController
+
+@enduml

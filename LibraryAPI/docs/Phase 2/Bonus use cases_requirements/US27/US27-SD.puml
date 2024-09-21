@@ -1,0 +1,42 @@
+@startuml
+actor Reader
+autonumber
+
+Reader -> AuthorController: GET /api/authors/{authorId}/books
+activate AuthorController
+
+AuthorController -> BookService: getBookAuthorsByAuthorId(authorId)
+activate BookService
+
+BookService -> BookAuthorRepository: getAuthorBooks(authorId)
+activate BookAuthorRepository
+BookAuthorRepository --> BookService: List<BookAuthor> bookAuthors
+deactivate BookAuthorRepository
+
+BookService -> Book: getBook() (for each bookAuthor)
+activate Book
+Book --> BookService: Book
+deactivate Book
+
+BookService -> BookService: create booksList from bookAuthors
+activate BookService
+BookService --> BookService: List<Book> booksList
+deactivate BookService
+
+BookService -> BookService: apply pagination to booksList
+activate BookService
+BookService --> BookService: Page<Book> booksPage
+deactivate BookService
+
+BookService --> AuthorController: Page<Book> booksPage
+deactivate BookService
+
+AuthorController -> BookViewMapper: toBookView(book)
+activate BookViewMapper
+BookViewMapper --> AuthorController: List<BookView> bookViews
+deactivate BookViewMapper
+
+AuthorController --> Reader: HTTP 200 OK (List<BookView> bookViews)
+deactivate AuthorController
+
+@enduml

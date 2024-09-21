@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian" as Librarian
+participant ":System" as System
+
+activate Librarian
+
+Librarian -> System: asks to search for an author by number
+System --> Librarian: informs operation success and shows author data
+@enduml

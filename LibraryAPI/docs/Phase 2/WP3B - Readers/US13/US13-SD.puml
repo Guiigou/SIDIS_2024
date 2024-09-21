@@ -1,0 +1,41 @@
+@startuml
+actor Reader as reader
+autonumber
+
+participant ReaderController as controller
+participant ReaderServiceImpl as service
+participant ReaderRepository as readerRepo
+participant BookRepository as bookRepo
+participant BookServiceImpl as bookService
+participant BookViewMapper as mapper
+
+reader -> controller: GET /{readerId}/suggestions
+activate controller
+controller -> service: getSuggestedBooks(readerId, pageable)
+activate service
+service -> readerRepo: findById(readerId)
+activate readerRepo
+readerRepo --> service: Reader
+deactivate readerRepo
+
+service -> bookRepo: findAll()
+activate bookRepo
+bookRepo --> service: List<Book>
+deactivate bookRepo
+
+service -> bookService: toPage(suggestedBooks, pageable)
+activate bookService
+bookService --> service: Page<Book>
+deactivate bookService
+
+service --> controller: Page<Book>
+deactivate service
+
+controller -> mapper: toBookView(Page<Book>)
+activate mapper
+mapper --> controller: Iterable<BookView>
+deactivate mapper
+
+controller --> reader: Iterable<BookView>
+deactivate controller
+@enduml

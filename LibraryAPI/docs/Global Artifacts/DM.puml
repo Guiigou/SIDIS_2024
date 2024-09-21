@@ -1,0 +1,127 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class modifiedAt {}
+
+class Role {
+    - ADMIN
+    - LIBRARIAN
+    - READER
+    - authority
+}
+
+
+class Book{
+    - id
+    - isbn
+    - title
+    - description
+}
+
+class BookCover {
+    - id
+    - image
+    - contentType
+}
+
+class BookAuthor{
+    - id
+}
+
+class Genre{
+    - id
+    - name
+}
+
+class Author{
+    - id
+    - name
+    - shortBio
+}
+
+class AuthorPhoto{
+    - id
+    - image
+    - contentType
+}
+
+
+class User {
+    - id
+    - modifiedBy
+    - createdBy
+    - username
+    - password
+    - fullName
+}
+
+class Anonymous{}
+
+class Librarian{}
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+    - funnyQuote
+    - interests
+}
+
+class ReaderPhoto{
+    - id
+    - image
+    - contentType
+}
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+}
+
+Anonymous -down- User : registers as >
+
+Author "1" *-- "1" AuthorPhoto
+
+Reader *-- ReaderPhoto : has a >
+Reader *-- dateOfBirth : has a >
+Reader ---- Book : reads >
+
+User <|-- Librarian : is a <
+User <|-- Reader : is a <
+User "1" -left- "1" Role
+User "1" -down- "1" modifiedAt : >
+User "1" -down- "1" createdAt : >
+
+Book "1" *-- "1" BookCover
+Book "1" -- "1..*" Lending
+Book -- Librarian: manages <
+Book "1" -left- "1..*" BookAuthor
+BookAuthor "1..*" -- "1" Author
+Book "1..*" *-up- "1" Genre
+
+Lending "1" *-- "1" lendDate
+Lending "1" *-- "1" returnedDate
+Lending "1" *-- "1" limitDate
+Lending "0..*" -- "1" Reader
+'lending user : manages
+
+Author -- Librarian: manages <
+Librarian -- Reader: manages >
+
+'VERIFICAR AS SETAS E O TEXTO ENTRE ELAS E AS SUAS CONEXÕES
+
+@enduml

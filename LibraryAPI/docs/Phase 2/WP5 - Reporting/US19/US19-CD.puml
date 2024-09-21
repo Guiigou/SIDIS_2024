@@ -1,0 +1,64 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Lending {
+    - id: Long
+    - lendingCode: String
+    - version: long
+    - readerId: Long
+    - bookId: Long
+    - bookTitle: String
+    - daysTillReturn: Integer
+    - daysOverdue: Integer
+    - fine: Float
+    - returned: boolean
+    - comment: String
+}
+
+class LendingController {
+    + getAverageLendingDurationPerGenrePerMonth(LocalDate startDate,LocalDate endDate): Map<Integer, Long>
+}
+
+class LendingServiceImpl {
+    + getAverageLendingDurationPerGenrePerMonth(LocalDate startDate, LocalDate endDate): Map<Integer, Long>
+}
+
+class LendingRepository {
+    + findAverageLendingDurationPerGenrePerMonth(startDate, endDate): List<Object[]>
+}
+
+class GenreServiceImpl {
+    + getGenreById(genreId: Long): Optional<Genre>
+}
+
+class GenreRepository {
+    + findGenreById(id: Long): Optional<Genre>
+}
+
+class Genre {
+    - id: Long
+    - name: String
+}
+
+class Book {
+    - id: Long
+    - title: String
+    - genre: Genre
+}
+
+LendingController ..> LendingServiceImpl : uses
+LendingServiceImpl ..> LendingRepository : uses
+LendingController ..> GenreServiceImpl : uses
+GenreServiceImpl ..> GenreRepository : uses
+GenreRepository ..> Genre : accesses
+LendingRepository ..> Lending : accesses
+
+Lending "0..*" -- "1" Book
+Lending "1" *-- "1" lendDate
+Lending "1" *-- "1" returnedDate
+Lending "1" *-- "1" limitDate
+Book "1" -- "1" Genre
+@enduml

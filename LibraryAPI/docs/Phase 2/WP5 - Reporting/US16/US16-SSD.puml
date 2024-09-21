@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian" as Librarian
+participant ":System" as System
+
+activate Librarian
+
+Librarian -> System: Requests number of lendings per month\nfor the last 12 months, broken down by genre
+activate System
+System -> System: Retrieve lending data for the last 12 months
+System -> System: Aggregate lendings per month by genre
+System --> Librarian: Display number of lendings per month\nbroken down by genre
+
+deactivate System
+@enduml

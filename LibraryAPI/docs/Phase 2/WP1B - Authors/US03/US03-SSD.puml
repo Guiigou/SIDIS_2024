@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian" as Librarian
+participant ":System" as System
+
+activate Librarian
+
+Librarian -> System: Requests to register an author with name, short bio, and optional photo
+alt If photo is provided
+    System -> System: Save author details and photo
+else If no photo
+    System -> System: Save author details
+end
+System --> Librarian: Informs operation success
+
+@enduml

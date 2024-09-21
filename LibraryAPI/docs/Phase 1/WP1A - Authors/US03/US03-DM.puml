@@ -1,0 +1,19 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Author{}
+class Id{}
+class Name {}
+class ShortBio{}
+
+class Librarian{}
+
+Author "1..*" -up- "1" Librarian: registers <
+
+Author *-- Id
+Author *-- Name
+Author *-- ShortBio
+
+@enduml

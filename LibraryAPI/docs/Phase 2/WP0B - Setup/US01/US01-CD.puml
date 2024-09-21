@@ -1,0 +1,58 @@
+@startuml
+ 'https://plantuml.com/class-diagram
+
+ hide circle
+ skinparam classAttributeIconSize 0
+
+ class UserBootstrapper {
+    +CommandLineRunner
+ }
+
+ class BookAuthor{
+    - id
+    BookAuthor(Long id)
+ }
+
+ class BookCover {
+    - id
+    - image
+    - contentType
+    BookCover(Long id,byte image,String contentType)
+ }
+
+class Author{
+    -id
+    -name
+    -shortBio
+    Author(Long id, String name, String shortBio)
+}
+
+class AuthorPhoto{
+    - id
+    - image
+    - contentType
+    BookCover(Long id,byte image,String contentType)
+}
+
+
+class Book {
+    - id
+    - isbn
+    - title
+    - genre
+    - description
+    Book(Long id, String isbn, String title,String description)
+}
+
+
+UserBootstrapper "1" --> "1..*" Author:  creates
+UserBootstrapper "1" --> "1..*" Book:  creates
+
+Book "1" *-- "1" BookCover
+
+Book "1" -down- "1..*" BookAuthor
+Author "1" -down- "1..*" BookAuthor
+
+Author "1" *-down- "1" AuthorPhoto
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+hide circle
+hide methods
+left to right direction
+
+
+class User{
+    - id
+    - modifiedBy
+    - createdBy
+    - username
+    - password
+    - fullName
+}
+
+class Roles{
+    - Admin
+    - Librarian
+}
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+
+}
+
+User "1" --- "1..*" Roles: has
+
+User "1" --- "1..*" Lending : creates
+Lending "1" *-- "1" lendDate
+Lending "1" *-- "1" returnedDate
+Lending "1" *-- "1" limitDate
+
+@enduml

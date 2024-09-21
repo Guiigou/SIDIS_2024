@@ -1,0 +1,42 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Book {
+    - isbn,
+    - title,
+    - genre,
+    - authors,
+    - description
+    Book(isbn, title, genre, authors, description=None)
+}
+
+class BookController
+{
+    + getBook(isbn)
+}
+class BookServiceImpl
+{
+    + getBooksByIsbn(isbn)
+}
+class BookViewMapper
+{
+    + toBookView(book)
+}
+
+class BookRepository
+{
+    + findBookByIsbn(isbn)
+}
+
+
+BookController ..> BookServiceImpl
+BookServiceImpl ..> BookRepository
+BookController ..> BookViewMapper
+BookController ..> Book
+BookServiceImpl ..> Book
+BookRepository "1" --> "1..*" Book: searches
+
+@enduml

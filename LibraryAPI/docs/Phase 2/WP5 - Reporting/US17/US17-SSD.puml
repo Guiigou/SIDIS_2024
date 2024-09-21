@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian" as Librarian
+participant ":System" as System
+
+activate Librarian
+
+Librarian -> System: Requests Top 5 readers per genre\nfor a certain period
+activate System
+System -> System: Retrieve lending data for the specified period
+System -> System: Aggregate and identify Top 5 readers per genre
+System --> Librarian: Display Top 5 readers per genre for the specified period
+
+deactivate System
+@enduml

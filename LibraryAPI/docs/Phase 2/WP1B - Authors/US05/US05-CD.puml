@@ -1,0 +1,69 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Book{
+    - id
+    - isbn
+    - title
+    - genre
+    - description
+}
+
+class BookAuthor{
+    - id
+}
+
+class Genre{
+    - id
+    - name
+}
+
+class Author{
+    - id
+    - name
+    - shortBio
+}
+
+class AuthorPhoto{
+    - id
+    - image
+    - contentType
+    AuthorPhoto(Long id,byte image,String contentType)
+}
+
+class AuthorController
+{
+    + getAuthorCoAuthors(id)
+}
+class BookServiceImpl
+{
+    + getBookAuthorsByAuthorId(id)
+}
+class AuthorViewMapper
+{
+    + toAuthorView(author)
+}
+
+class BookAuthorRepository
+{
+    + getAuthorBooks(authorId)
+}
+
+
+AuthorController ..> BookServiceImpl
+BookServiceImpl ..> BookAuthorRepository
+AuthorController ..> AuthorViewMapper
+AuthorController ..> Author
+BookServiceImpl ..> Author
+BookAuthorRepository "1" --> "1..*" Author: searches
+
+Book "1" -- "1..*" BookAuthor
+BookAuthor "1..*" -- "1" Author
+Book "1..*" -up- "1" Genre
+
+Author "1" *-- "1" AuthorPhoto
+
+@enduml

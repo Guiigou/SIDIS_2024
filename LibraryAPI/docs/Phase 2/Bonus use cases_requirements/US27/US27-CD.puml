@@ -1,0 +1,61 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+class AuthorController {
+    + getAuthorBooks(page: int, size: int, authorId: Long): List<BookView>
+}
+
+class BookService {
+    + getBookAuthorsByAuthorId(authorId: Long): List<BookAuthor>
+}
+
+interface BookAuthorRepository <<interface>> {
+    + getAuthorBooks(authorId: Long): List<BookAuthor>
+}
+
+class BookViewMapper {
+    + toBookView(book: Book): BookView
+}
+
+class BookView {
+    - id: Long
+    - isbn: String
+    - title: String
+    - genre: BookGenreView
+    - description: String
+    - bookAuthors: List<BookAuthorView>
+}
+
+class Book {
+    - id: Long
+    - isbn: String
+    - title: String
+    - genre: Genre
+    - description: String
+    - bookAuthors: List<BookAuthor>
+}
+
+class BookAuthor {
+    - id: Long
+    - book: Book
+    - author: Author
+}
+
+class Author {
+    - id: Long
+    - name: String
+    - biography: String
+    - bookAuthors: List<BookAuthor>
+}
+
+AuthorController ..> BookService : uses
+BookService ..> BookAuthorRepository : uses
+AuthorController ..> BookViewMapper : uses
+BookViewMapper ..> Book
+BookViewMapper ..> BookView
+BookAuthorRepository ..> BookAuthor : retrieves
+BookAuthor ..> Book : contains
+BookAuthor ..> Author : contains
+
+@enduml

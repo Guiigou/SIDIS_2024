@@ -1,0 +1,17 @@
+@startuml
+ 'https://plantuml.com/class-diagram
+
+ hide circle
+ skinparam classAttributeIconSize 0
+
+ class Bootstrapper {
+
+ }
+
+class Genre {
+
+}
+
+ Bootstrapper "1" --> "0.." Genre:  creates
+
+ @enduml

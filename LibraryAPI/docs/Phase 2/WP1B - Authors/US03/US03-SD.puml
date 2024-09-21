@@ -1,0 +1,51 @@
+@startuml
+
+autoactivate on
+autonumber
+
+participant "Librarian:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":AuthorController" as Ctrl
+participant "service:AuthorServiceImpl" as Service
+participant "repo:AuthorRepository" as Repo
+participant "mapper:EditAuthorMapper" as EditAuthorMapper
+participant "mapper:AuthorViewMapper" as ViewMapper
+participant "storage:PhotoStorageService" as PhotoStorage
+participant "result:HttpResult" as Result
+
+activate HTTPClient
+
+HTTPClient -> System: POST /api/authors
+System -> Ctrl: createAuthor(resource, authorPhoto)
+Ctrl -> Service: createAuthor(resource, authorPhoto)
+
+Service -> Service: validateCreateAuthorRequest(resource)
+Service --> Service: ok
+
+Service -> EditAuthorMapper: create(resource)
+EditAuthorMapper --> Service: author
+
+Service -> Repo: save(author)
+Repo --> Service: author
+
+alt If authorPhoto is provided
+    Service -> PhotoStorage: doUploadFile(author.getId().toString(), authorPhoto)
+    PhotoStorage --> Service: ok
+end
+
+Service -> Repo: save(author)
+Repo --> Service: author
+
+Service --> Ctrl: author
+
+Ctrl -> ViewMapper: toAuthorView(author)
+ViewMapper --> Ctrl: authorView
+
+Ctrl -> Ctrl: build new URI with ServletUriComponentsBuilder
+
+Ctrl --> Result**: ResponseEntity.created(newUri).eTag(author.getVersion()).body(authorView)
+Ctrl --> System: result
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+
+@enduml

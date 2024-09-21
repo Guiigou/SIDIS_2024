@@ -1,0 +1,19 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Reader{
+}
+
+class Librarian {
+}
+
+class Lending {
+}
+
+Reader "1..*" -- "1"  Lending : searches Lending\n by lendingNumber >
+Librarian "1..*" -- "1" Lending : searches Lending\nby lendingNumber >
+
+
+@enduml

@@ -1,0 +1,37 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+
+class Librarian{}
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+}
+
+class Book{
+    - id
+    - isbn
+    - title
+    - description
+}
+
+Librarian "1" -left- "1..*" Book
+
+Book "1" -- "1..*" Lending
+
+Lending "1" *-- "1" lendDate
+Lending "1" *-- "1" returnedDate
+Lending "1" *-- "1" limitDate
+
+@enduml

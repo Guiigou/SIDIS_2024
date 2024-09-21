@@ -1,0 +1,34 @@
+@startuml
+actor System
+autonumber
+
+System -> ReaderController: GET /api/readers/{readerId}
+activate ReaderController
+
+ReaderController -> ReaderService: getReaderByIdWithQuote(readerId)
+activate ReaderService
+
+ReaderService -> ReaderRepository: findReaderById(readerId)
+activate ReaderRepository
+ReaderRepository --> ReaderService: Optional<Reader> reader
+deactivate ReaderRepository
+
+alt reader found
+    ReaderService -> Reader: updateAge()
+    Reader -> Reader: getFunnyQuote()
+else reader not found
+    ReaderService -> ReaderController: throw NotFoundException
+end
+
+ReaderService --> ReaderController: Optional<Reader> reader
+deactivate ReaderService
+
+ReaderController -> ReaderProfileViewMapper: toReaderProfileView(reader)
+activate ReaderProfileViewMapper
+ReaderProfileViewMapper --> ReaderController: ReaderProfileView
+deactivate ReaderProfileViewMapper
+
+ReaderController --> System: HTTP 200 OK (ReaderProfileView)
+deactivate ReaderController
+
+@enduml

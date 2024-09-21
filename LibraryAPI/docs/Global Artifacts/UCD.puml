@@ -1,0 +1,109 @@
+@startuml
+'https://plantuml.com/use-case-diagram
+
+title Use Case Diagram
+
+left to right direction
+
+actor : Anonymous: as Anon
+actor : Librarian : as Librarian
+actor : Reader : as Reader
+actor : Admin : as Admin
+
+rectangle Phase1 {
+  (US01 -  'bootstrap' user credential data for librarians) as (US01)
+  (US02 -  'bootstrap' genre data) as (US02)
+
+  (US03 - As Librarian I want to register an author 'name, short bio') as (US03)
+  (US04 - As Librarian I want to update an author’s data) as (US04)
+  (US05 - As Librarian or Reader I want to know an author’s detail given its author number) as (US05)
+  (US06 - As Librarian or Reader I want to search authors by name) as (US06)
+
+  (US07 - As Librarian, I want to register a book) as (US07)
+  (US08 - As Librarian I want to update a book’s data) as (US08)
+  (US09 - As Librarian or Reader I want to know the details of a book given its ISBN) as (US09)
+  (US10 - As Librarian or Reader I want to search books by genre) as (US10)
+
+  (US11 - As anonymous I want to register as a reader) as (US11)
+  (US12 - As Reader I want to update my personal data) as (US12)
+  (US13 - As Librarian I want to know a user’s detail given its reader number) as (US13)
+  (US14 - As Librarian I want to search Readers by name) as (US14)
+
+  (US15 - As Librarian I want to lend a book to a reader) as (US15)
+  (US16 - As Reader I want to return a book. If the return is overdue I’m fined by the library) as (US16)
+  (US17 - As Reader or Librarian I want to know the details of a lending given its lending number) as (US17)
+}
+
+rectangle Phase2 {
+  (US01B -  'bootstrap' author and book data with meaningful data) as (US01B)
+  (US02B -  'bootstrap' lending data with meaningful data) as (US02B)
+
+  (US03B - As Librarian I want to register an author with an optional photo) as (US03B)
+  (US04B - As Reader I want to know the books of an Author) as (US04B)
+  (US05B - As Reader I want to know the co-authors of an author and their respective books) as (US05B)
+  (US06B - As Reader I want to know the Top 5 authors which have the most lent books) as (US06B)
+
+  (US07B - As Librarian, I want to register a book with a book cover photo) as (US07B)
+  (US08B - As Reader I want to search books by title) as (US08B)
+  (US09B - As Librarian I want to know the Top 5 books lent) as (US09B)
+  (US10B - As Librarian I want to know the Top 5 genres) as (US10B)
+
+  (US11B - As Librarian I want to know the Top 5 readers) as (US11B)
+  (US12B - As anonymous I want to register as a reader with an optional photo and list of interests) as (US12B)
+  (US13B - As Reader I want a list of book suggestions based on my interest list) as (US13B)
+
+  (US23 - As Librarian I want to list overdue lending sorted by their tardiness) as (US23)
+  (US14B - As Librarian I want to know the average number of lending per genre of a certain month) as (US14B)
+  (US15B - As Librarian I want to know the Average lending duration) as (US15B)
+
+  (US16B - As Librarian I want to know the number of lendings per month for the last 12 months, broken down by genre) as (US16B)
+  (US17B - As Librarian I want to know the Top 5 readers per genre of a certain period) as (US17B)
+  (US18B - As Librarian I want to know the Monthly lending per reader of a certain period) as (US18B)
+  (US19B - As Librarian I want to know the Average lending duration Per genre per month for a certain period) as (US19B)
+}
+
+Anon --> US11
+Anon --> US12B
+
+Librarian --> US03
+Librarian --> US04
+Librarian --> US05
+Librarian --> US06
+Librarian --> US07
+Librarian --> US08
+Librarian --> US09
+Librarian --> US10
+Librarian --> US13
+Librarian --> US14
+Librarian --> US15
+Librarian --> US17
+Librarian --> US23
+Librarian --> US14B
+Librarian --> US15B
+Librarian --> US16B
+Librarian --> US17B
+Librarian --> US18B
+Librarian --> US19B
+Librarian --> US03B
+Librarian --> US07B
+Librarian --> US09B
+Librarian --> US10B
+Librarian --> US11B
+
+Reader --> US05
+Reader --> US06
+Reader --> US09
+Reader --> US10
+Reader --> US12
+Reader --> US16
+Reader --> US17
+Reader --> US04B
+Reader --> US05B
+Reader --> US06B
+Reader --> US08B
+Reader --> US13B
+
+Admin --> US01
+Admin --> US02
+
+@enduml

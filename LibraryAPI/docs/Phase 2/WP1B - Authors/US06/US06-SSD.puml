@@ -1,0 +1,14 @@
+@startuml
+'autonumber'
+
+actor "Reader" as Reader
+participant ":System" as System
+activate Reader
+
+Reader -> System: Requests to know the Top 5 authors\nwith the most lent books
+activate System
+System -> System: Retrieves data on book lending\nstatistics
+System -> System: Identifies Top 5 authors with\nthe most lent books
+System --> Reader: Displays the Top 5 authors
+deactivate System
+@enduml

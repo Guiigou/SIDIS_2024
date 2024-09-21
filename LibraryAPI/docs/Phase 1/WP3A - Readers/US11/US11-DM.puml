@@ -1,0 +1,24 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Anonymous{}
+class Reader {}
+class ReaderNumber{}
+class ReaderName {}
+class ReaderEmail{}
+class ReaderDateOfBirth{}
+class ReaderPhoneNumber{}
+class ReaderGDBRConsent{}
+
+Anonymous "1" -- "1" Reader : registers as >
+Reader *-down- ReaderNumber
+Reader *-- ReaderName
+Reader *-- ReaderEmail
+Reader *-- ReaderDateOfBirth
+Reader *-- ReaderPhoneNumber
+Reader *-- ReaderGDBRConsent
+
+
+@enduml

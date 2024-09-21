@@ -1,0 +1,61 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class LendingController {
+    + getTopReadersPerGenre(genreId: Long, startDate: LocalDate, endDate: LocalDate): Iterable<ReaderView>
+}
+
+class ReaderService {
+    + getTopReadersperGenre(topN: int, genre: Genre, startDate: LocalDate, endDate: LocalDate): Iterable<Reader>
+}
+
+interface ReaderRepository <<interface>> {
+    + findTopReadersPerGenre(pageable: Pageable, genre: Genre, startDate: LocalDate, endDate: LocalDate): List<Reader>
+}
+
+class GenreService {
+    + getGenreById(id: Long): Optional<Genre>
+}
+
+interface GenreRepository <<interface>> {
+    + findGenreById(id: Long): Optional<Genre>
+}
+
+class ReaderViewMapper {
+    + toReaderView(readers: Iterable<Reader>): Iterable<ReaderView>
+}
+
+class ReaderView {
+    - id: Long
+    - name: String
+    - email: String
+    - age: int
+}
+
+class Genre {
+    - id: Long
+    - name: String
+}
+
+class Reader {
+    - id: Long
+    - name: String
+    - email: String
+    - age: int
+}
+
+LendingController ..> ReaderService : uses
+LendingController ..> GenreService : uses
+ReaderService ..> ReaderRepository : uses
+GenreService ..> GenreRepository : uses
+ReaderService ..> Genre : uses
+ReaderRepository ..> Reader : accesses
+GenreRepository ..> Genre : accesses
+LendingController ..> ReaderViewMapper : uses
+ReaderViewMapper ..> Reader : maps
+ReaderViewMapper ..> ReaderView : creates
+
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+
+class Reader {}
+class ReaderNumber{}
+class ReaderName {}
+class ReaderEmail{}
+class ReaderDateOfBirth{}
+class ReaderPhoneNumber{}
+class ReaderGDBRConsent{}
+
+
+Reader *---left ReaderNumber
+Reader *-- ReaderName
+Reader *-- ReaderEmail
+Reader *-- ReaderDateOfBirth
+Reader *-- ReaderPhoneNumber
+Reader *-- ReaderGDBRConsent
+
+@enduml

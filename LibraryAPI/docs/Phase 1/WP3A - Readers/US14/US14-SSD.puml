@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian" as User
+participant ":System" as System
+
+activate User
+
+User -> System: asks to get readers list by name
+System --> User: readers list by name and informs operation success
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Admin" as User
+participant ":Bootstrapper" as Ctrl
+participant "genreRepo:GenreRepository" as Repo
+
+activate User
+
+User -> Ctrl: asks to bootstrap genre data
+Ctrl -> Repo: adds genre to genre repository
+Repo --> Ctrl: creates genre and saves it
+
+@enduml

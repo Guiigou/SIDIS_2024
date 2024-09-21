@@ -1,0 +1,32 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Librarian{}
+class User{}
+class Reader{}
+class Book{}
+class BookISBN{}
+class BookTitle{}
+class BookDescription{}
+class BookAuthor{}
+class BookGenre{}
+class Genre{}
+
+BookGenre "1..*" -right- "1" Genre
+Book *-up- BookISBN
+Book *-up- BookTitle
+Book *-up- BookDescription
+Book "1" -left- "1..*" BookAuthor
+Book "1" -right- "1..*" BookGenre
+
+Book "1..*" -- "1" Librarian: registers <
+User <|-- Librarian
+User <|-- Reader
+Librarian "1" -- "1..*" Reader: registers >
+
+
+
+@enduml

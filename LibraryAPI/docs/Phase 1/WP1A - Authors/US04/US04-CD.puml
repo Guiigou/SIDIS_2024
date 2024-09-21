@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Author{
+    - id
+    - name
+    - shortBio
+    + getVersion()
+    + getName
+    + getShortBio
+    + setName
+    + setShortBio
+    + updateData(final long desiredVersion, final String name, final String shortBio)
+    Author(name, shortBio)
+}
+
+class AuthorController
+{
+    + updateAuthor(request, id, resource)
+}
+class AuthorServiceImpl
+{
+    + updateAuthor(id, resource, getVersionFromIfMatchHeader(ifMatchValue))
+    + validateCreateAuthorRequest(final EditAuthorRequest request)
+}
+class AuthorViewMapper
+{
+    + toAuthorView(author)
+}
+
+class EditAuthorMapper
+{
+    + create(resource)
+}
+
+class AuthorRepository
+{
+    + save(author)
+}
+
+class EditAuthorRequest
+{
+    - name
+    - shortBio
+}
+
+AuthorController ..> AuthorServiceImpl
+AuthorServiceImpl ..> EditAuthorMapper
+AuthorServiceImpl ..> AuthorRepository
+AuthorController ..> AuthorViewMapper
+EditAuthorMapper ..> EditAuthorRequest
+AuthorController ..> Author
+AuthorServiceImpl ..> Author
+EditAuthorRequest ..> Author
+AuthorRepository "1" --> "0..*" Author: records
+
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+'autonumber'
+
+actor "Reader" as Reader
+participant ":System" as System
+activate Reader
+
+Reader -> System: Requests to search for the co-authors\nof an author and their books.
+activate System
+System -> System: Searches for books belonging\nto the chosen author
+System --> System: List of books by the\nauthor and co-authors
+System --> Reader: Informs operation success and displays author's\n along with their books and co-authors
+deactivate System
+@enduml

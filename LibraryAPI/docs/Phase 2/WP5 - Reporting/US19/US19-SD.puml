@@ -1,0 +1,28 @@
+@startuml
+actor Librarian
+autonumber
+
+Librarian -> LendingController: GET /api/lendings/average-duration-per-genre
+activate LendingController
+
+LendingController -> LendingService: getAverageLendingDurationPerGenrePerMonth(startDate, endDate)
+activate LendingService
+
+LendingService -> LendingRepository: findAverageLendingDurationPerGenrePerMonth(startDate, endDate)
+activate LendingRepository
+
+LendingRepository --> LendingService: List<Object[]>
+deactivate LendingRepository
+
+LendingService -> LendingAvgPerGenrePerMonthViewMapper: toLendingAvgPerGenrePerMonthViewList(results)
+activate LendingAvgPerGenrePerMonthViewMapper
+
+LendingAvgPerGenrePerMonthViewMapper --> LendingService: Iterable<LendingAvgPerGenrePerMonthView>
+deactivate LendingAvgPerGenrePerMonthViewMapper
+
+LendingService --> LendingController: Iterable<LendingAvgPerGenrePerMonthView>
+deactivate LendingService
+
+LendingController --> Librarian: Iterable<LendingAvgPerGenrePerMonthView>
+deactivate LendingController
+@enduml

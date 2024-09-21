@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian or Reader" as User
+participant ":System" as System
+
+activate User
+
+User -> System: asks to get books list by genre
+System --> User: books list by genre and informs operation success
+@enduml

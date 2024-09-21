@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian" as Librarian
+participant ":System" as System
+
+activate Librarian
+
+Librarian -> System: Requests list of overdue lendings\nsorted by tardiness
+activate System
+System -> System: Retrieve overdue lending data
+System -> System: Sort lendings by tardiness
+System --> Librarian: Display list of overdue lendings\nsorted by tardiness
+
+deactivate System
+@enduml

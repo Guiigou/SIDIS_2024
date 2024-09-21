@@ -1,0 +1,43 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+hide circle
+hide methods
+left to right direction
+skinparam classAttributeIconSize 0
+
+
+class User{
+    - id
+    - modifiedBy
+    - createdBy
+    - username
+    - password
+    - fullName
+}
+
+class Roles{
+    - Admin
+    - Librarian
+}
+
+class Author {
+    - id
+    - name
+    - shortBio
+}
+
+class Book {
+    - id
+    - isbn
+    - title
+    - genre
+    - description
+}
+
+User "1" --- "1..*" Roles: has
+
+User "1" --- "1..*" Author : creates
+User "1" --- "1..*" Book : creates
+
+@enduml

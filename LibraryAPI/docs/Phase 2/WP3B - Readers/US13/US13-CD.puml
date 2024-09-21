@@ -1,0 +1,60 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Reader {
+    - id: Long
+    - readerCode: int
+    - name: String
+    - email: String
+    - age: int
+    - phoneNumber: String
+    - GDBRConsent: Boolean
+    - funnyQuote: String
+    - interests: List<String>
+    Reader (Long id, int readerCode, String name, String email, int age, String phoneNumber, Boolean GDBRConsent, String funnyQuote, List<String> interests)
+}
+
+class ReaderController {
+    + getSuggestedBooks(readerId: Long, page: int, size: int): Iterable<BookView>
+}
+
+class ReaderServiceImpl {
+    + getSuggestedBooks(readerId: Long, pageable: Pageable): Page<Book>
+}
+
+class BookViewMapper {
+    + toBookView(books: Page<Book>): Iterable<BookView>
+}
+
+class ReaderRepository {
+    + findById(id: Long): Optional<Reader>
+}
+
+class BookRepository {
+    + findAll(): List<Book>
+}
+
+class BookServiceImpl {
+    + toPage(books: List<Book>, pageable: Pageable): Page<Book>
+}
+
+class Book {
+    - id: Long
+    - title: String
+    - genre: Genre
+    + getGenre(): Genre
+}
+
+
+ReaderController ..> ReaderServiceImpl
+ReaderController ..> BookViewMapper
+ReaderServiceImpl ..> ReaderRepository
+ReaderServiceImpl ..> BookRepository
+ReaderServiceImpl ..> BookServiceImpl
+ReaderRepository "1" --> "1..*" Reader : searches
+BookRepository "1" --> "1..*" Book : contains
+
+@enduml

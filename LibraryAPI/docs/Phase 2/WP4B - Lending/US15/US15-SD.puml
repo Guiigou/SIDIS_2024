@@ -1,0 +1,23 @@
+@startuml
+actor Librarian
+autonumber
+
+Librarian -> LendingController: GET /api/lendings/average
+activate LendingController
+
+LendingController -> LendingServiceImpl: getAverageLendingDuration()
+activate LendingServiceImpl
+
+LendingServiceImpl -> LendingRepository: findAll()
+activate LendingRepository
+LendingRepository -> LendingServiceImpl: List<Lending> lendings
+deactivate LendingRepository
+
+LendingServiceImpl -> LendingServiceImpl: calculateAverageDuration(lendings)
+LendingServiceImpl -> LendingController: averageLendingDuration
+deactivate LendingServiceImpl
+
+LendingController -> Librarian: HTTP 200 OK (averageLendingDuration)
+deactivate LendingController
+
+@enduml

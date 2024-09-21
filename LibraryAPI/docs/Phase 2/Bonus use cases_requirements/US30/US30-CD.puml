@@ -1,0 +1,34 @@
+@startuml
+hide circle
+skinparam classAttributeIconSize 0
+
+class LendingController {
+    + getAverageLendingDurationPerBook(): Iterable<LendingAvgPerBookView>
+}
+
+class LendingService {
+    + getAverageLendingDurationPerBook(): Iterable<LendingAvgPerBookView>
+}
+
+interface LendingRepository <<interface>> {
+    + findAverageLendingDurationPerBook(): List<Object[]>
+}
+
+class LendingAvgPerBookViewMapper {
+    + toLendingAvgPerBookViewList(results: List<Object[]>): Iterable<LendingAvgPerBookView>
+    + toLendingAvgPerBookView(result: Object[]): LendingAvgPerBookView
+}
+
+class LendingAvgPerBookView {
+    - bookId: Long
+    - averageDuration: Double
+    LendingAvgPerBookView(Long bookId, Double averageDuration)
+}
+
+LendingController ..> LendingService : uses
+LendingService ..> LendingRepository : uses
+LendingService ..> LendingAvgPerBookViewMapper : uses
+LendingAvgPerBookViewMapper ..> LendingAvgPerBookView : creates
+LendingRepository ..> LendingAvgPerBookView : retrieves
+
+@enduml

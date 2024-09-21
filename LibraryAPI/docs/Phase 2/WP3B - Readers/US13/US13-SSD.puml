@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Reader" as Reader
+participant ":System" as System
+
+activate Reader
+
+Reader -> System: Requests to get a list of book \nsuggestions based on a interest list
+System -> System: Forms a list of books based\non the Reader´s interest list
+System --> Reader: Returns a list of books based on the interest list
+@enduml

@@ -1,0 +1,74 @@
+@startuml
+'autonumber'
+
+autoactivate on
+autonumber
+
+participant "Reader:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":AuthorController" as Ctrl
+participant "service:AuthorService" as AuthorService
+participant "service:BookService" as BookService
+participant "service:LendingService" as LendingService
+participant "repo:AuthorRepository" as AuthorRepo
+participant "repo:BookAuthorRepository" as BookAuthorRepo
+participant "mapper:AuthorLentsViewMapper" as AuthorLentsViewMapper
+participant "entity:Author" as Author
+participant "entity:BookAuthor" as BookAuthor
+participant "entity:Lending" as Lending
+participant "result:HttpResult" as Result
+
+activate HTTPClient
+
+HTTPClient -> System: GET /authors/top-5
+activate System
+System -> Ctrl: getTop5Authors()
+activate Ctrl
+
+Ctrl -> AuthorService: getAuthors()
+activate AuthorService
+AuthorService -> AuthorRepo: findAll()
+activate AuthorRepo
+AuthorRepo --> AuthorService: List<Author>
+deactivate AuthorRepo
+AuthorService --> Ctrl: List<Author>
+deactivate AuthorService
+
+loop for each Author
+    Ctrl -> BookService: getBookAuthorsByAuthorId(author.getId())
+    activate BookService
+    BookService -> BookAuthorRepo: getAuthorBooks(author.getId())
+    activate BookAuthorRepo
+    BookAuthorRepo --> BookService: List<BookAuthor>
+    deactivate BookAuthorRepo
+    BookService --> Ctrl: List<BookAuthor>
+    deactivate BookService
+
+    loop for each BookAuthor
+        Ctrl -> LendingService: getLentBook(bookAuthor.getId())
+        activate LendingService
+        LendingService -> LendingRepo: findLentByBookAuthorId(bookAuthor.getId())
+        activate LendingRepo
+        LendingRepo --> LendingService: List<Lending>
+        deactivate LendingRepo
+        LendingService --> Ctrl: List<Lending>
+        deactivate LendingService
+        Ctrl -> Author: setLents(lents.size())
+    end
+end
+
+Ctrl -> Ctrl: sort authors by lents
+Ctrl -> Ctrl: get top 5 authors
+
+Ctrl -> AuthorLentsViewMapper: toAuthorLentsView(topFive)
+activate AuthorLentsViewMapper
+AuthorLentsViewMapper --> Ctrl: Iterable<AuthorLentsView>
+deactivate AuthorLentsViewMapper
+
+Ctrl --> Result: create(200, Iterable<AuthorLentsView>)
+deactivate Ctrl
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+deactivate HTTPClient
+
+@enduml

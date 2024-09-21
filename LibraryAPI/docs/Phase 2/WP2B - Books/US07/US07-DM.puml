@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Librarian{}
+
+class Book{
+    - id
+    - isbn
+    - title
+    - description
+}
+
+class BookCover {
+    - id
+    - image
+    - contentType
+}
+
+Book "1..*" -- "1" Librarian: registers <
+Book "1" *-up- "1" BookCover
+
+@enduml

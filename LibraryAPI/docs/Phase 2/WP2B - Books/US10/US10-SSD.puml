@@ -1,0 +1,13 @@
+@startuml
+'autonumber'
+
+actor "Librarian" as Librarian
+participant ":System" as System
+activate Librarian
+
+Librarian -> System: Requests to know the Top 5 genres
+activate System
+System -> System: Identifies Top 5 genres
+System --> Librarian: Displays the Top 5 genres
+deactivate System
+@enduml

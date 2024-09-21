@@ -1,0 +1,72 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Reader{
+    - id
+    - name
+    - email
+    - dateOfBirth
+    - phoneNumber
+    - GDBRConsent
+    + getVersion()
+    + getName
+    + getEmail
+    + getDateOfBirth
+    + getPhoneNumber
+    + getGDBRConsent
+    + setName
+    + setEmail
+    + setDateOfBirth
+    + setPhoneNumber
+    + setGDBRConsent
+    + updateData(final long desiredVersion, final String name, final String email, final LocalDate dateOfBirth, final Integer phoneNumber, final Boolean GDBRConsent)
+    Reader(name, email, dateOfBirth, phoneNumber, GDBRConsent)
+}
+
+class ReaderController
+{
+    + updateReader(request, id, resource)
+}
+class ReaderServiceImpl
+{
+    + updateReader(id, resource, getVersionFromIfMatchHeader(ifMatchValue))
+    + validateCreateReaderRequest(final EditReaderRequest request)
+}
+class ReaderViewMapper
+{
+    + toReaderView(reader)
+}
+
+class EditReaderMapper
+{
+    + create(resource)
+}
+
+class ReaderRepository
+{
+    + save(reader)
+}
+
+class EditReaderRequest
+{
+    - name
+    - email
+    - dateOfBirth
+    - phoneNumber
+    - GDBRConsent
+}
+
+ReaderController ..> ReaderServiceImpl
+ReaderServiceImpl ..> EditReaderMapper
+ReaderServiceImpl ..> ReaderRepository
+ReaderController ..> ReaderViewMapper
+EditReaderMapper ..> EditReaderRequest
+ReaderController ..> Reader
+ReaderServiceImpl ..> Reader
+EditReaderRequest ..> Reader
+ReaderRepository "1" --> "0..*" Reader: records
+
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Admin" as User
+participant ":Bootstrapper" as Ctrl
+participant "authorRepo:AuthorRepository" as Repo
+participant "bookRepo:BookRepository" as Repo1
+
+activate User
+
+User -> Ctrl: asks to bootstrap author and book data
+loop for each data
+    Ctrl -> Repo: checks if the data already exists
+    Ctrl -> Repo1: checks if the data already exists
+    Repo --> Ctrl: if not, creates author data and saves it
+    Repo1 --> Ctrl: if not, creates book data and saves it
+end loop
+
+@enduml

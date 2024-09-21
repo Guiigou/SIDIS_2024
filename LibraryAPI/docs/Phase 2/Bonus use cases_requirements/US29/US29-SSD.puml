@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian" as Librarian
+participant ":System" as System
+
+activate Librarian
+
+Librarian -> System: Requests to search Readers by email
+activate System
+System -> System: Retrieve Readers with the specified email
+System --> Librarian: Display list of Readers matching the email
+
+deactivate System
+@enduml

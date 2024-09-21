@@ -1,0 +1,84 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class HTTPClient {
+}
+
+class RouteHandler {
+    + handleRequest(data: json): HttpResult
+}
+
+class LendingController {
+    + returnBook(resource: EditLendingRequest): ResponseEntity<LendingView>
+}
+
+class ReaderService {
+    + getReaderById(readerId: Long): Optional<Reader>
+}
+
+class BookService {
+    + getBookByISBN(isbn: String): Optional<Book>
+}
+
+class LendingService {
+    + returnBook(resource: EditLendingRequest): Lending
+    + checkOverdue(reader: Reader, book: Book): boolean
+    + processFine(reader: Reader, book: Book): double
+}
+
+interface ReaderRepository <<interface>> {
+    + findById(readerId: Long): Optional<Reader>
+}
+
+interface BookRepository <<interface>> {
+    + findByIsbn(isbn: String): Optional<Book>
+}
+
+interface LendingRepository <<interface>> {
+    + save(lending: Lending): Lending
+}
+
+class Reader {
+    - readerId: Long
+    - name: String
+    - email: String
+}
+
+class Book {
+    - isbn: String
+    - title: String
+    - authors: List<String>
+}
+
+class Lending {
+    - id: Long
+    - reader: Reader
+    - book: Book
+    - lendDate: Date
+    - returnDate: Date
+    - overdue: boolean
+}
+
+class HttpResult {
+    -status: HttpStatus
+    -result: json
+    HttpResult(HttpStatus status, const json &result);
+}
+
+HTTPClient --> RouteHandler
+RouteHandler --> LendingController
+LendingController --> LendingService
+LendingService --> BookService
+LendingService --> ReaderService
+ReaderService --> ReaderRepository
+BookService --> BookRepository
+LendingService --> LendingRepository
+LendingRepository ..> Lending
+ReaderRepository ..> Reader
+BookRepository ..> Book
+LendingController --> HttpResult
+
+@enduml

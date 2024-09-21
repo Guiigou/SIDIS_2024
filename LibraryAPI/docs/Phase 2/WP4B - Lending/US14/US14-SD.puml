@@ -1,0 +1,26 @@
+@startuml
+actor Librarian
+autonumber
+
+Librarian -> LendingController: GET /api/lendings/average-per-genre/{date}
+activate LendingController
+
+LendingController -> GenreServiceImpl: getGenres()
+activate GenreServiceImpl
+GenreServiceImpl -> LendingController: List<Genre> genres
+deactivate GenreServiceImpl
+
+LendingController -> LendingServiceImpl: AveragePerGenreInMonth(date, genres.size())
+activate LendingServiceImpl
+LendingServiceImpl -> LendingRepository: averagePerGenreInMonth(date, genres.size())
+activate LendingRepository
+LendingRepository -> LendingServiceImpl: averagePerGenre
+deactivate LendingRepository
+
+LendingServiceImpl -> LendingController: averagePerGenre
+deactivate LendingServiceImpl
+
+LendingController -> Librarian: HTTP 200 OK (averagePerGenre)
+deactivate LendingController
+
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Admin" as User
+participant ":Bootstrapper" as Ctrl
+participant "lendingRepo:LendingRepository" as Repo
+
+activate User
+
+User -> Ctrl: asks to bootstrap lending data
+loop for each data
+    Ctrl -> Repo: checks if the data already exists
+    Repo --> Ctrl: if not, creates lending data and saves it
+end loop
+
+@enduml

@@ -1,0 +1,58 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Author{
+    - id
+    - name
+    - shortBio
+}
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+}
+
+class Book{
+    - id
+    - isbn
+    - title
+    - genre
+    - description
+}
+
+class BookAuthor{
+    - id
+}
+
+class User {
+    - id
+    - modifiedBy
+    - createdBy
+    - username
+    - password
+    - fullName
+}
+
+class Role {
+    - READER
+    - authority
+}
+
+Author "1.." -up- "1" User: searches <
+
+Book "1" -- "1..*" BookAuthor
+BookAuthor "1..*" -- "1" Author
+Book "1" -left- "1..*" Lending
+User "1" -left- "1" Role : >
+
+@enduml

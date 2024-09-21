@@ -1,0 +1,33 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor Librarian
+
+activate Librarian
+activate System
+Librarian -> System: Checks reader's overdue books
+System --> Librarian: Number of overdue books
+deactivate System
+alt No overdue books
+    Librarian -> System: Checks number of books lent
+    activate System
+    System --> Librarian: Number of books lent
+    deactivate System
+    alt Less than 3 books lent
+        Librarian -> System: Lends a book
+            activate System
+        System --> Librarian: Book lent successfully
+        deactivate System
+        System --> Librarian: Provides return date
+        activate System
+    else More than or equal to 3 books lent
+        Librarian <-- System: Cannot lend more than 3 books
+    end
+else Overdue books exist
+    Librarian <-- System: Cannot lend books until overdue books are returned
+end
+
+@enduml
+

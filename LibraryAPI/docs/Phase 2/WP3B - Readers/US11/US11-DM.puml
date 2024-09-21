@@ -1,0 +1,32 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+}
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+}
+
+Lending "1..*" -up- "1" Reader
+Librarian "1" -- "1..*" Reader: searches >
+
+@enduml

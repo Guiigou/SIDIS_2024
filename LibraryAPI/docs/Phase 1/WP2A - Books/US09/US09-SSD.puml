@@ -1,0 +1,14 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian or Reader" as User
+participant ":System" as System
+
+activate User
+
+User -> System: asks to get book details by Isbn
+System --> User: book details and informs operation success
+@enduml

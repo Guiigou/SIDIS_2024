@@ -1,0 +1,61 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Reader{
+    - id
+    - name
+    - email
+    - dateOfBirth
+    - phoneNumber
+    - GDBRConsent
+    + getVersion()
+    Reader(name, email, dateOfBirth, phoneNumber, GDBRConsent)
+}
+
+class ReaderController
+{
+    + createReader(final EditReaderRequest resource)
+}
+class ReaderServiceImpl
+{
+    + createReader(resource)
+    + validateCreateReaderRequest(request)
+}
+class ReaderViewMapper
+{
+    + toReaderView(reader)
+}
+
+class EditReaderMapper
+{
+    + create(resource)
+}
+
+class ReaderRepository
+{
+    + save(reader)
+}
+
+class EditReaderRequest
+{
+    - name
+    - email
+    - dateOfBirth
+    - phoneNumber
+    - GDBRConsent
+}
+
+ReaderController ..> ReaderServiceImpl
+ReaderServiceImpl ..> EditReaderMapper
+ReaderServiceImpl ..> ReaderRepository
+ReaderController ..> ReaderViewMapper
+EditReaderMapper ..> EditReaderRequest
+ReaderController ..> Reader
+ReaderServiceImpl ..> Reader
+EditReaderRequest ..> Reader
+ReaderRepository "1" --> "0..*" Reader: records
+
+@enduml

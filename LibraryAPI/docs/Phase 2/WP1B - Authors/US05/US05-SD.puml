@@ -1,0 +1,54 @@
+@startuml
+'autonumber'
+
+autoactivate on
+autonumber
+
+participant "Reader:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":AuthorController" as Ctrl
+participant "service:BookServiceImpl" as BookService
+participant "mapper:BookViewMapper" as BookViewMapper
+participant "repo:BookAuthorRepository" as BookAuthorRepo
+participant "entity:BookAuthor" as BookAuthor
+participant "entity:Book" as Book
+participant "result:HttpResult" as Result
+
+activate HTTPClient
+
+HTTPClient -> System: GET /{authorId}/co-authors
+activate System
+System -> Ctrl: getAuthorCoAuthors(authorId)
+activate Ctrl
+Ctrl -> BookService: getBookAuthorsByAuthorId(authorId)
+activate BookService
+BookService -> BookAuthorRepo: getAuthorBooks(authorId)
+activate BookAuthorRepo
+BookAuthorRepo --> BookService: List<BookAuthor>
+deactivate BookAuthorRepo
+deactivate BookService
+
+Ctrl -> Ctrl: Iterate over bookAuthors
+loop for each BookAuthor
+    alt if Book has multiple authors
+        BookAuthor -> Book: getBook()
+        activate Book
+        Book -> BookAuthor: getBookAuthors()
+        BookAuthor --> Book: List<BookAuthor>
+        Book --> Ctrl: book
+        deactivate Book
+    end
+end
+
+Ctrl -> BookViewMapper: toBookView(booksList)
+activate BookViewMapper
+BookViewMapper --> Ctrl: Iterable<BookView>
+deactivate BookViewMapper
+
+Ctrl --> Result: create(200, Iterable<BookView>)
+deactivate Ctrl
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+deactivate HTTPClient
+
+@enduml

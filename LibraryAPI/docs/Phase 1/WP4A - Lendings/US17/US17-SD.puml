@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autoactivate on
+autonumber
+
+participant "Librarian/Reader:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant "LendCtrl:Lending Controller" as LendCtrl
+participant "LendService:Lending Service" as LendService
+participant "LendRepo:Lending Repository" as LendRepo
+participant "Result:Http Result" as Result
+participant "Mapper:LendingViewMapper" as ViewMapper
+activate HTTPClient
+
+HTTPClient -> System: GET /lend/{lendingId}
+System -> LendCtrl: getLending(lendingId)
+activate LendCtrl
+
+LendCtrl -> LendService: getLending(lendingNumber)
+activate LendService
+LendService -> LendRepo: findLendingbyID(lendingNumber)
+activate LendRepo
+LendRepo --> LendService: lend
+deactivate LendRepo
+LendService --> LendCtrl: lend
+deactivate LendService
+
+LendCtrl -> ViewMapper: toLendingView(lend)
+activate ViewMapper
+ViewMapper --> LendCtrl: lendingView
+deactivate ViewMapper
+
+LendCtrl -> Result: create(200, lendingView)
+activate Result
+Result -> System: setHttpResult(resp, result)
+deactivate Result
+System --> HTTPClient: HTTP 200 OK
+
+@enduml

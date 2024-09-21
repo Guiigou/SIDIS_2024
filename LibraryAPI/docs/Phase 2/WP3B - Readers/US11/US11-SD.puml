@@ -1,0 +1,32 @@
+@startuml
+
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+participant "Anonymous:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":ReaderController" as Ctrl
+participant "service:ReaderService" as Service
+participant "repo:ReaderRepository" as Repo
+participant "mapper:ReaderViewMapper" as ReaderViewMapper
+participant "reader:Reader" as Reader
+participant "result:HttpResult" as Result
+
+activate HTTPClient
+
+HTTPClient -> System: GET/top-readers
+System -> Ctrl: getTopReaders()
+Ctrl -> Service: getTopReaders()
+Service -> Service: getTopReaders(5)
+Service -> Repo: findTopReaders(PageRequest, startDate, endDate)
+Repo --> Service: topReaders
+Service -> ReaderViewMapper: toReaderView(topReaders)
+ReaderViewMapper --> Ctrl: readerViews
+Ctrl --> Result**: create(200)
+Ctrl --> System: result
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+
+@enduml

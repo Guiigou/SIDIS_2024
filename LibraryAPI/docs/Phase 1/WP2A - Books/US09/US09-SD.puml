@@ -1,0 +1,31 @@
+@startuml
+
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+participant "Librarian:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":BookController" as Ctrl
+participant "service:BookService" as Service
+participant "repo:BookRepository" as Repo
+participant "result:HttpResult" as Result
+participant "mapper:BookViewMapper" as ViewMapper
+
+activate HTTPClient
+
+HTTPClient -> System: GET/Books/{isbn}
+System -> Ctrl: getBook(isbn)
+Ctrl -> Service: getBooksByIsbn(isbn)
+Service -> Repo: findBookByIsbn(isbn)
+Repo --> Service: book
+Service --> Ctrl: book
+Ctrl -> ViewMapper: toBookView(book)
+ViewMapper --> Ctrl: bookView
+Ctrl --> Result**: create(200, bookView)
+Ctrl --> System: result
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+
+@enduml

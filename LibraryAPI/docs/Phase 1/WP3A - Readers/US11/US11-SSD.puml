@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Anonymous" as Anonymous
+participant ":System" as System
+
+activate Anonymous
+
+Anonymous -> System: asks to register to be a reader
+System --> Anonymous: informs operation success
+
+@enduml

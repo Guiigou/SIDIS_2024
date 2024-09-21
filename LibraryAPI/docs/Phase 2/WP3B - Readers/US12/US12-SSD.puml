@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor "Anonymous" as Anonymous
+participant ":System" as System
+
+activate Anonymous
+activate System
+
+Anonymous -> System: Requests to register as a reader
+alt If Reader photo is provided
+    System -> System: Save Reader details and Reader photo
+else If no Reader photo
+    System -> System: Save Reader details
+end
+
+alt If List of Interest is provided
+activate System
+    System -> System: Save Reader details and List of Interest
+else If no List of Interest
+    System -> System: Save Reader details
+end
+System --> Anonymous: Informs operation success
+deactivate System
+
+@enduml

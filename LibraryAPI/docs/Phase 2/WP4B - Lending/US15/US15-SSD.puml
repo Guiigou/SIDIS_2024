@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Librarian" as Librarian
+participant ":System" as System
+
+activate Librarian
+
+Librarian -> System: Requests average lending duration
+activate System
+System -> System: Retrieve lending duration data
+System -> System: Calculate average lending duration
+System --> Librarian: Display average lending duration
+
+deactivate System
+@enduml

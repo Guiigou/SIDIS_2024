@@ -1,0 +1,64 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class LendingController {
+    + getOverdue(page: int, size: int): List<LendingView>
+}
+
+class LendingServiceImpl {
+    + getOverdueLendings(pageable: Pageable): Page<Lending>
+}
+
+interface LendingRepository <<interface>> {
+    + findOverdueLendings(pageable: Pageable): Page<Lending>
+}
+
+class Lending {
+    - id: Long
+    - lendingCode: String
+    - version: long
+    - readerId: Long
+    - bookId: Long
+    - bookTitle: String
+    - daysTillReturn: Integer
+    - daysOverdue: Integer
+    - fine: Float
+    - returned: boolean
+    - comment: String
+}
+
+class LendingView {
+    - id: Long
+    - lendingCode: String
+    - readerId: Long
+    - bookId: Long
+    - bookTitle: String
+    - daysTillReturn: Integer
+    - daysOverdue: Integer
+    - fine: Float
+    - returned: boolean
+    - comment: String
+}
+
+class LendingViewMapper {
+    + toLendingView(lending: Lending): LendingView
+    + toLendingViewList(lendings: List<Lending>): List<LendingView>
+}
+
+LendingController ..> LendingServiceImpl : uses
+LendingServiceImpl ..> LendingRepository : uses
+LendingRepository ..> Lending : accesses
+LendingController ..> LendingView
+LendingController ..> LendingViewMapper : uses
+LendingViewMapper ..> Lending
+LendingViewMapper ..> LendingView
+
+Lending "1" *-- "1" lendDate
+Lending "1" *-- "1" returnedDate
+Lending "1" *-- "1" limitDate
+
+
+@enduml

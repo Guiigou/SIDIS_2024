@@ -1,0 +1,62 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autoactivate on
+autonumber
+
+participant "Reader:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant "LendingCtrl:Lending Controller" as LendingCtrl
+participant "ReaderService:Reader Service" as ReaderService
+participant "BookService:Book Service" as BookService
+participant "LendingService:Lending Service" as LendingService
+participant "ReaderRepo:Reader Repository" as ReaderRepo
+participant "BookRepo:Book Repository" as BookRepo
+participant "LendingRepo:Lending Repository" as LendingRepo
+participant "Result:Http Result" as Result
+participant "Mapper:LendingViewMapper" as ViewMapper
+
+activate HTTPClient
+
+HTTPClient -> System: POST /return(data)
+System -> LendingCtrl: returnBook(resource)
+activate LendingCtrl
+
+LendingCtrl -> ReaderService: getReaderById(resource.getReaderId())
+activate ReaderService
+ReaderService -> ReaderRepo: findById(resource.getReaderId())
+activate ReaderRepo
+ReaderRepo --> ReaderService: readerData
+deactivate ReaderRepo
+ReaderService --> LendingCtrl: reader
+deactivate ReaderService
+
+LendingCtrl -> BookService: getBookByISBN(resource.getIsbn())
+activate BookService
+BookService -> BookRepo: findByIsbn(resource.getIsbn())
+activate BookRepo
+BookRepo --> BookService: bookData
+deactivate BookRepo
+BookService --> LendingCtrl: book
+deactivate BookService
+
+LendingCtrl -> LendingService: returnBook(resource)
+activate LendingService
+LendingService -> LendingRepo: save(lending)
+activate LendingRepo
+LendingRepo --> LendingService: lending
+deactivate LendingRepo
+LendingService --> LendingCtrl: lending
+deactivate LendingService
+
+LendingCtrl -> ViewMapper: toLendingView(lending)
+activate ViewMapper
+ViewMapper --> LendingCtrl: lendingView
+deactivate ViewMapper
+
+LendingCtrl -> Result: create(201, lendingView)
+activate Result
+Result -> System: setHttpResult(resp, result)
+deactivate Result
+System --> HTTPClient: HTTP 201 CREATED
+
+@enduml

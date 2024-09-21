@@ -1,0 +1,57 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Book {
+    - isbn: String
+    - title: String
+    - genre: String
+    - authors: List<Author>
+    - description: String
+    Book(isbn: String, title: String, genre: String, authors: List<Author>, description: String=None)
+}
+
+class BookController {
+    + getTopBooks(): Iterable<LentBookView>
+}
+
+class BookServiceImpl {
+    + getBooksByIsbn(isbn: String)
+    + getTopBooks(): Iterable<Book>
+}
+
+class lentBookViewMapper {
+    + toBookView(book: Book): BookView
+    + toLentBookView(books: Iterable<Book>, lendings: Iterable<Lending>): Iterable<LentBookView>
+}
+
+class BookRepository {
+    + findBookByIsbn(isbn: String): Book
+}
+
+class LendingRepository {
+    + findTopBookIds(): Iterable<Object[]>
+    + findAll(): Iterable<Lending>
+}
+
+class LentBookView {
+    - id: String
+    - title: String
+    - author: String
+    - genre: String
+    - totalLendings: int
+}
+
+BookController ..> BookServiceImpl
+BookServiceImpl ..> BookRepository
+BookServiceImpl ..> LendingRepository
+BookController ..> lentBookViewMapper
+BookController ..> LentBookView
+BookServiceImpl ..> LentBookView
+BookRepository "1" --> "1..*" Book
+LendingRepository ..> Book
+LendingRepository ..> LentBookView
+
+@enduml

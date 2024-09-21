@@ -1,0 +1,40 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Author{
+    - id
+    - name
+    - shortBio
+    + getVersion()
+}
+
+class AuthorController
+{
+    + getAuthor(id)
+}
+class AuthorServiceImpl
+{
+    + getAuthorsById(id)
+}
+class AuthorViewMapper
+{
+    + toAuthorView(author)
+}
+
+class AuthorRepository
+{
+    + findAuthorById(id)
+}
+
+
+AuthorController ..> AuthorServiceImpl
+AuthorServiceImpl ..> AuthorRepository
+AuthorController ..> AuthorViewMapper
+AuthorController ..> Author
+AuthorServiceImpl ..> Author
+AuthorRepository "1" --> "1..*" Author: searches
+
+@enduml

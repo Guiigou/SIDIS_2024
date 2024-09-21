@@ -1,0 +1,38 @@
+@startuml
+
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+participant "Librarian:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":AuthorController" as Ctrl
+participant "service:AuthorService" as Service
+participant "repo:AuthorRepository" as Repo
+participant "mapper:EditAuthorMapper" as EditAuthorMapper
+participant "author:Author" as Author
+participant "result:HttpResult" as Result
+participant "mapper:AuthorViewMapper" as ViewMapper
+
+activate HTTPClient
+
+HTTPClient -> System: POST/authors(data)
+System -> Ctrl: createAuthor(resource)
+Ctrl -> Service: createAuthor(resource)
+Service -> Service: validateCreateAuthorRequest(resource)
+Service --> Service: ok
+Service -> EditAuthorMapper: create(resource)
+EditAuthorMapper --> Author**: create(EditAuthorRequest request)
+EditAuthorMapper --> Service: author
+Service -> Repo: save(author)
+Repo --> Service: author
+Service --> Ctrl: author
+Ctrl -> ViewMapper: toAuthorView(book)
+ViewMapper --> Ctrl: authorView
+Ctrl --> Result**: create(201, authorView)
+Ctrl --> System: result
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+
+@enduml

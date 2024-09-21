@@ -1,0 +1,107 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Book{
+    - id
+    - isbn
+    - title
+    - description
+}
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+}
+
+class BookAuthor{
+    - id
+    + getBook():Book
+}
+
+class Genre{
+    - id
+    - name
+}
+
+class Author{
+    - id
+    - name
+    - shortBio
+}
+
+class AuthorPhoto{
+    - id
+    - image
+    - contentType
+}
+
+class AuthorController {
+    + getTop5Authors(): Iterable<AuthorLentsView>
+}
+
+class AuthorServiceImpl {
+    + getAuthors(pageable): List<Author>
+}
+
+class BookServiceImpl {
+    + getBookAuthorsByAuthorId(authorId: Long): List<BookAuthor>
+}
+
+class LendingServiceImpl {
+    + getLentBook(bookAuthorId: Long): List<Lending>
+}
+
+class AuthorViewMapper {
+    + toAuthorView(author: Author): AuthorView
+}
+
+class AuthorLentsViewMapper {
+    + toAuthorLentsView(authors: List<Author>): Iterable<AuthorLentsView>
+}
+
+class AuthorRepository {
+    + findAll(): List<Author>
+}
+
+class BookAuthorRepository {
+    + getAuthorBooks(authorId: Long): List<BookAuthor>
+}
+
+class LendingRepository {
+    + getLentBook(bookId: Long): List<Lending>
+}
+
+AuthorController ..> AuthorServiceImpl
+AuthorController ..> BookServiceImpl
+AuthorController ..> LendingServiceImpl
+AuthorController ..> AuthorViewMapper
+AuthorController ..> AuthorLentsViewMapper
+
+AuthorServiceImpl ..> AuthorRepository
+BookServiceImpl ..> BookAuthorRepository
+LendingServiceImpl ..> LendingRepository
+
+AuthorController ..> Author
+
+BookAuthorRepository "1" --> "1..*" Author: searches
+
+Book "1" -- "1..*" BookAuthor
+BookAuthor "1..*" -- "1" Author
+Book "1..*" -up- "1" Genre
+
+Author "1" *-- "1" AuthorPhoto
+
+Book "1" -left- "1..*" Lending
+
+@enduml

@@ -1,0 +1,39 @@
+@startuml
+
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+participant "Reader:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":ReaderController" as Ctrl
+participant "service:ReaderService" as Service
+participant "repo:ReaderRepository" as Repo
+participant "mapper:ReaderViewMapper" as ReaderViewMapper
+participant "reader:Reader" as Reader
+participant "result:HttpResult" as Result
+
+
+activate HTTPClient
+
+HTTPClient -> System: POST /api/readers
+System -> Ctrl: createReader(resource)
+Ctrl -> Service: createReader(resource)
+Service -> Service: validateCreateReaderRequest(resource)
+Service --> Service: ok
+Service -> Reader: create(resource)
+Service -> Service: setAge(reader, currentDate)
+Service -> Service: setReaderCode(reader)
+Service -> Service: setInterests(reader, interests)
+Service -> Repo: save(reader)
+Repo --> Service: reader
+Service --> Ctrl: reader
+Ctrl -> ReaderViewMapper: toReaderView(reader)
+ReaderViewMapper --> Ctrl: readerView
+Ctrl --> Result**: create(201)
+Ctrl --> System: result
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+
+@enduml

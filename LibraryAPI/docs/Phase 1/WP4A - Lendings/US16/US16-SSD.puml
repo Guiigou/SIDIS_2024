@@ -1,0 +1,19 @@
+@startuml
+actor Reader
+participant System
+
+Reader -> System: Request to return book
+activate Reader
+activate System
+System -> Reader: Acknowledge return request
+deactivate Reader
+alt Book return on time
+    System -> System: Process return
+    System -> Reader: Confirmation of successful return
+else Book return overdue
+    System -> System: Process return
+    System -> System: Calculate fine
+    System -> Reader: Confirmation of return with fine
+end
+deactivate System
+@enduml

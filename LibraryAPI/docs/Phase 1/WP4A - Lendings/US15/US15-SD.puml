@@ -1,0 +1,68 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+autoactivate on
+autonumber
+
+participant "Librarian:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":LendingController" as LendCtrl
+participant "readerService:ReaderService" as ReaderService
+participant "bookService:BookService" as BookService
+participant "lendService:LendingService" as LendService
+participant "readerRepo:ReaderRepository" as ReaderRepo
+participant "bookRepo:BookRepository" as BookRepo
+participant "lendRepo:LendingRepository" as LendRepo
+participant "result:HttpResult" as Result
+participant "mapper:LendingViewMapper" as ViewMapper
+participant "mapper:EditLendingMapper" as EditMapper
+participant "lending:Lending" as Lending
+
+activate HTTPClient
+
+HTTPClient -> System: POST /lend(data)
+System -> LendCtrl: createLending(resource)
+activate LendCtrl
+
+LendCtrl -> BookService: getBookByISBN(resource.getBookId())
+activate BookService
+BookService -> BookRepo: findById(resource.getBookId())
+activate BookRepo
+BookRepo --> BookService: bookData
+deactivate BookRepo
+BookService --> LendCtrl: book
+deactivate BookService
+
+LendCtrl -> ReaderService: getReaderById(resource.getReaderId())
+activate ReaderService
+ReaderService -> ReaderRepo: findById(resource.getReaderId())
+activate ReaderRepo
+ReaderRepo --> ReaderService: readerData
+deactivate ReaderRepo
+ReaderService --> LendCtrl: reader
+deactivate ReaderService
+
+LendCtrl -> LendService: createLending(resource)
+activate LendService
+LendService -> EditMapper: CreateLending(resource)
+EditMapper -> Lending** : Create(EditLendingRequest request)
+EditMapper --> LendService : lending
+LendService -> LendRepo : save(lending)
+activate LendRepo
+deactivate EditMapper
+LendRepo --> LendService: lending
+deactivate LendRepo
+LendService --> LendCtrl: lending
+deactivate LendService
+
+LendCtrl -> ViewMapper: toLendingView(lending)
+activate ViewMapper
+ViewMapper --> LendCtrl: lendingView
+deactivate ViewMapper
+
+LendCtrl -> Result: create(201, lend)
+activate Result
+Result -> System: setHttpResult(resp, result)
+deactivate Result
+System --> HTTPClient: HTTP 201 CREATED
+
+@enduml

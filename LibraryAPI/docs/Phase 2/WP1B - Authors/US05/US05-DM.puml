@@ -1,0 +1,45 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Author{
+    - id
+    - name
+    - shortBio
+}
+
+class Book{
+    - id
+    - isbn
+    - title
+    - genre
+    - description
+}
+
+class BookAuthor{
+    - id
+}
+
+class User {
+    - id
+    - modifiedBy
+    - createdBy
+    - username
+    - password
+    - fullName
+}
+
+class Role {
+    - READER
+    - authority
+}
+
+Author "1.." -up- "1" User: searches <
+
+Book "1" -- "1..*" BookAuthor
+BookAuthor "1..*" -- "1" Author
+
+User "1" -left- "1" Role : >
+
+@enduml

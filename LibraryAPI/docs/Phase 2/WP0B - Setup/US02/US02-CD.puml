@@ -1,0 +1,34 @@
+@startuml
+ 'https://plantuml.com/class-diagram
+
+ hide circle
+ skinparam classAttributeIconSize 0
+
+ class UserBootstrapper {
+    +CommandLineRunner
+ }
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+    Lending(Long id,String lendindCode,Long readerId, Long bookId, String bookTitle, Integer daysTillReturn,\nBoolean returned, Integer daysOverdue, Float fine, String comment)
+}
+
+
+UserBootstrapper "1" --> "0..*" Lending:  creates
+
+Lending "1" *-- "1" lendDate
+Lending "1" *--- "1" returnedDate
+Lending "1" *-- "1" limitDate
+
+
+
+@enduml

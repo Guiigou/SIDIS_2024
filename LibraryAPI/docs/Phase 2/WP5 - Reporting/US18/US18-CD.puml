@@ -1,0 +1,45 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class LendingController {
+    + getMonthlyLending(startDate: LocalDate, endDate: LocalDate): Iterable<ReaderLentsView>
+}
+
+class ReaderService {
+    + getAllReaders(): Iterable<Reader>
+    + getMonthlyLending(readerId: Long, startDate: LocalDate, endDate: LocalDate): int
+}
+
+interface ReaderRepository <<interface>> {
+    + findAll(): List<Reader>
+    + getMonthlyLending(readerId: Long, startDate: LocalDate, endDate: LocalDate): int
+}
+
+class ReaderLentsViewMapper {
+    + toReaderLentsView(readers: Iterable<Reader>): Iterable<ReaderLentsView>
+}
+
+class ReaderLentsView {
+    - id: Long
+    - name: String
+    - lents: int
+}
+
+class Reader {
+    - id: Long
+    - name: String
+    - lents: int
+    + setLents(lents: int)
+}
+
+LendingController ..> ReaderService : uses
+ReaderService ..> ReaderRepository : uses
+LendingController ..> ReaderLentsViewMapper : uses
+ReaderLentsViewMapper ..> Reader
+ReaderLentsViewMapper ..> ReaderLentsView
+ReaderRepository ..> Reader
+
+@enduml

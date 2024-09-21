@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+hide circle
+hide methods
+left to right direction
+
+class Book{}
+class BookISBN{}
+class BookTitle{}
+class BookDescription{}
+
+class BookAuthor{}
+class BookGenre{}
+
+class Genre{}
+
+Book *-down- BookISBN
+Book *-up- BookTitle
+Book *-up- BookDescription
+
+Book "1" -left- "1..*" BookAuthor
+BookGenre "1..*" -right- "1" Genre
+BookGenre "1..*" -left- "1" Book
+
+@enduml

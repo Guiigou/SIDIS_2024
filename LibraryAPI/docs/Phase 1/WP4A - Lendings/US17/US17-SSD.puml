@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+actor LibrarianReader
+
+LibrarianReader -> System: Request lending details with lending number
+activate LibrarianReader
+activate System
+alt Lending details found
+    System --> LibrarianReader: Provide lending details
+else Lending details not found
+    System --> LibrarianReader: No lending found with provided lending number
+end
+deactivate LibrarianReader
+deactivate System
+
+@enduml

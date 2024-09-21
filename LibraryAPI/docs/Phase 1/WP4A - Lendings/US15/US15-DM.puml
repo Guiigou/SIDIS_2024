@@ -1,0 +1,31 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+BookGenre "1..*" -right- "1" Genre
+Book *-up- BookISBN
+Book *-up- BookTitle
+Book *-up- BookDescription
+Book "1" -left- "1..*" BookAuthor
+Book "1" -right- "1..*" BookGenre
+
+Reader *-down- ReaderNumber
+Reader *-- ReaderName
+Reader *-- ReaderEmail
+Reader *-- ReaderDateOfBirth
+Reader *-- ReaderPhoneNumber
+Reader *-- ReaderGDBRConsent
+
+class Reader{
+}
+class Librarian{
+
+}
+
+class Book {}
+
+Book "1" -- "1" Librarian: lends  <
+Reader "1" -- "1" Book: to  <
+
+@enduml

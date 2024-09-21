@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class User{
+    - id
+    - modifiedBy
+    - createdBy
+    - username
+    - password
+    - fullName
+}
+
+class Role {
+    - ADMIN
+    - LIBRARIAN
+    - authority
+}
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+    - funnyQuote
+    - interests
+}
+
+class ReaderPhoto{
+    - id
+    - image
+    - contentType
+}
+
+User "1" -left- "1" Role
+User <|-- Librarian : is a <
+Librarian "1" -- "1..*" Reader: manages >
+Reader *-- dateOfBirth : has a >
+Reader *-- ReaderPhoto : has a >
+
+
+@enduml

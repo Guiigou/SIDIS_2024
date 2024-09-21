@@ -1,0 +1,43 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Reader{
+    - id
+    - name
+    - email
+    - dateOfBirth
+    - phoneNumber
+    - GDBRConsent
+    + getVersion()
+}
+
+class ReaderController
+{
+    + getReader(id)
+}
+class ReaderServiceImpl
+{
+    + getReadersById(id)
+}
+class ReaderViewMapper
+{
+    + toReaderView(reader)
+}
+
+class ReaderRepository
+{
+    + findReaderById(id)
+}
+
+
+ReaderController ..> ReaderServiceImpl
+ReaderServiceImpl ..> ReaderRepository
+ReaderController ..> ReaderViewMapper
+ReaderController ..> Reader
+ReaderServiceImpl ..> Reader
+ReaderRepository "1" --> "1..*" Reader: searches
+
+@enduml

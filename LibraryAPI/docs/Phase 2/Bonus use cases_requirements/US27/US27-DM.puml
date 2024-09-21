@@ -1,0 +1,62 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+}
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+    - interests
+}
+
+class Book{
+    - id
+    - isbn
+    - title
+    - description
+}
+
+class BookAuthor{
+    - id
+}
+
+class Author{
+    - id
+    - name
+    - shortBio
+}
+
+class AuthorPhoto{
+    - id
+    - image
+    - contentType
+}
+
+Lending "1..*" -- "1" Reader
+Book "1" -- "1..*" Lending
+Book "1" -left- "1..*" BookAuthor
+BookAuthor "1..*" -- "1" Author
+Author "1" *-left "1" AuthorPhoto
+Reader --- Book : reads >
+
+@enduml

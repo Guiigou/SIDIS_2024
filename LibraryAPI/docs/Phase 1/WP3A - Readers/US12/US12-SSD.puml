@@ -1,0 +1,15 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+actor "Reader" as Reader
+participant ":System" as System
+
+activate Reader
+
+Reader -> System: asks to update his personal data
+System --> Reader: informs operation success
+
+@enduml

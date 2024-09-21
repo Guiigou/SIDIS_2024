@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+    - funnyQuote
+    - interests
+}
+
+Librarian "1" -- "1..*" Reader: manages >
+
+@enduml

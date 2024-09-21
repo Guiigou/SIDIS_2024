@@ -1,0 +1,13 @@
+@startuml
+'autonumber'
+
+actor "Librarian" as Librarian
+participant ":System" as System
+activate Librarian
+
+Librarian -> System: Requests to know the Top 5 books lent
+activate System
+System -> System: Identifies Top 5 books with\nthe most lendings
+System --> Librarian: Displays the Top 5 books\nwith the most lendings
+deactivate System
+@enduml

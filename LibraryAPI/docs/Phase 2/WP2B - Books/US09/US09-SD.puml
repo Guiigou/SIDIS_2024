@@ -1,0 +1,38 @@
+@startuml
+
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+participant "Librarian:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":BookController" as Ctrl
+participant "service:BookService" as Service
+participant "repo:BookRepository" as Repo
+participant "result:HttpResult" as Result
+participant "mapper:LentBookViewMapper" as ViewMapper
+participant "repo:LendingRepository" as LendingRepo
+participant "service:LendingService" as LendingService
+
+activate HTTPClient
+
+HTTPClient -> System: GET api/books/top-books
+System -> Ctrl: getTopBooks()
+Ctrl -> Service: getTopBooks()
+Service -> Repo: findTopBookIds()
+Repo --> Service: bookIds
+Service -> LendingService: getLendings()
+LendingService -> LendingRepo: findAll()
+LendingRepo --> LendingService: lendings
+Service -> Repo: findById(bookId)
+Repo --> Service: book
+Service --> Ctrl: books
+Ctrl -> ViewMapper: toLentBookView(books, lendings)
+ViewMapper --> Ctrl: lentBookViews
+Ctrl --> Result**: create(200, lentBookViews)
+Ctrl --> System: result
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+
+@enduml

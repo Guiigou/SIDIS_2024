@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Librarian{}
+
+class Lending {
+    - id
+    - lendindCode
+    - readerId
+    - bookId
+    - bookTitle
+    - daysTillReturn
+    - returned
+    - daysOverdue
+    - fine
+    - comment
+}
+
+class Book{
+    - id
+    - isbn
+    - title
+    - description
+}
+
+class Genre{
+    - id
+    - name
+}
+
+Book "1..*" *-up- "1" Genre
+Book "1" -left- "1..*" Lending
+Book "1..*" -- "1" Librarian
+Librarian .- Genre : searches >
+
+
+
+@enduml

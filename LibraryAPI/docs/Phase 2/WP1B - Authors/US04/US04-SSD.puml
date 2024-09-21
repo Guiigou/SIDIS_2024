@@ -1,0 +1,15 @@
+@startuml
+'autonumber'
+
+actor "Reader" as Reader
+participant ":System" as System
+
+activate Reader
+
+Reader -> System: Requests to search for an author by number
+activate System
+System -> System: Searches for books\nbelonging to the chosen author
+System --> System: List of books by the author
+System --> Reader: Informs operation success\nand displays author's along with their books
+deactivate System
+@enduml

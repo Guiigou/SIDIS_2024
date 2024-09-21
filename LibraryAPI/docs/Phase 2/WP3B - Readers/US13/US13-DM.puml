@@ -1,0 +1,32 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+    - interests
+}
+
+class Book{
+    - id
+    - isbn
+    - title
+    - description
+}
+
+class Genre{
+    - id
+    - name
+}
+
+Book -right- Reader: reads <
+Book "1..*" *-up- "1" Genre
+
+@enduml

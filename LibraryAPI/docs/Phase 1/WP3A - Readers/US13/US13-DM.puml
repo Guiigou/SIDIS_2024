@@ -1,0 +1,31 @@
+@startuml
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Librarian{}
+
+class Reader{}
+class ReaderNumber{}
+class ReaderName {}
+class ReaderEmail{}
+class ReaderDateOfBirth{}
+class ReaderPhoneNumber{}
+class ReaderGDBRConsent{}
+
+
+Reader *-down- ReaderNumber
+Reader *-- ReaderName
+Reader *-- ReaderEmail
+Reader *-- ReaderDateOfBirth
+Reader *-- ReaderPhoneNumber
+Reader *-- ReaderGDBRConsent
+Librarian "1" -right- "1..*" Reader: searchs for >
+
+
+
+
+
+
+
+@enduml

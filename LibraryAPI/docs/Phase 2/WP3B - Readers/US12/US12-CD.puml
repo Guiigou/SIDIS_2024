@@ -1,0 +1,82 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+    -funnyQuote
+    - interests
+    Reader ( Int id, int readerCode, String name, String email, Int age, String phoneNumber, Boolean GDBRConsent, String funnyQuote, String interests )
+}
+
+class ReaderPhoto{
+    - id
+    - image
+    - contentType
+    ReaderPhoto( Int id, byte image , String contentType)
+}
+
+class ReaderController
+{
+    + createReader(EditReaderRequest resource, MultipartFile photo)
+}
+class ReaderServiceImpl
+{
+    + createReader(createReader(resource, photo)): Reader
+    + validateCreateReaderRequest(resource)
+}
+
+class ReaderViewMapper
+{
+    + toReaderView(reader: Reader): ReaderView
+}
+
+class EditReaderMapper
+{
+    + create(resource: EditReaderRequest): Reader
+}
+
+class ReaderRepository
+{
+    + save(reader: Reader): Reader
+}
+
+class EditReaderRequest
+{
+    - name: String
+    - email: String
+    - dateOfBirth: LocalDate
+    - phoneNumber: Integer
+    - GDBRConsent: Boolean
+    - interests: List<String>
+    - photo: byte[]
+}
+
+class ReaderView
+{
+    - name: String
+    - email: String
+}
+
+ReaderController ..> ReaderServiceImpl
+ReaderServiceImpl ..> ReaderRepository
+ReaderController ..> ReaderViewMapper
+ReaderRepository "1" --> "0..*" Reader: records
+ReaderRepository ..> Reader
+ReaderViewMapper ..> ReaderView
+EditReaderMapper ..> EditReaderRequest
+ReaderController ..> Reader
+ReaderServiceImpl ..> Reader
+EditReaderRequest ..> Reader
+
+Reader *-- ReaderPhoto : has a >
+
+@enduml

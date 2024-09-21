@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/class-diagram
+skinparam classAttributeIconSize 0
+hide circle
+hide methods
+
+class Reader{
+    - id
+    - readerCode
+    - name
+    - email
+    - age
+    - phoneNumber
+    - GDBRConsent
+    -funnyQuote
+    - interests
+}
+
+class Book{
+    - id
+    - isbn
+    - title
+    - description
+}
+
+
+Book "1..*" -- "1" Reader: searches book\nby title <
+
+@enduml

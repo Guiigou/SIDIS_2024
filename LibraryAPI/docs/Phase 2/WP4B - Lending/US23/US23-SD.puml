@@ -1,0 +1,28 @@
+@startuml
+actor Librarian
+autonumber
+
+Librarian -> LendingController: GET /api/lendings/overdue
+activate LendingController
+
+LendingController -> LendingServiceImpl: getOverdueLendings(Pageable pageable)
+activate LendingServiceImpl
+
+LendingServiceImpl -> LendingRepository: findOverdueLendings(Pageable pageable)
+activate LendingRepository
+LendingRepository -> LendingServiceImpl: List<Lending> overdueLendings
+deactivate LendingRepository
+
+LendingServiceImpl -> LendingController: List<LendingView> lendingViews
+
+LendingController -> LendingViewMapper: toLendingViewList(overdueLendings)
+activate LendingViewMapper
+LendingViewMapper -> LendingController: List<LendingView> lendingViews
+deactivate LendingViewMapper
+
+deactivate LendingServiceImpl
+
+LendingController -> Librarian: HTTP 200 OK (List<LendingView> lendingViews)
+deactivate LendingController
+
+@enduml

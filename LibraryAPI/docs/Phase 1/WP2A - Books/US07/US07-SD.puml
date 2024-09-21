@@ -1,0 +1,38 @@
+@startuml
+
+'https://plantuml.com/sequence-diagram
+
+autoactivate on
+autonumber
+
+participant "Anonymous:HTTPClient" as HTTPClient
+participant "handler:RouteHandler" as System
+participant ":BookController" as Ctrl
+participant "service:BookService" as Service
+participant "repo:BookRepository" as Repo
+participant "mapper:EditBookMapper" as EditBookMapper
+participant "book:Book" as Book
+participant "result:HttpResult" as Result
+participant "mapper:BookViewMapper" as ViewMapper
+
+activate HTTPClient
+
+HTTPClient -> System: POST/books(data)
+System -> Ctrl: createBook(resource)
+Ctrl -> Service: createBook(resource)
+Service -> Service: validateCreateBookRequest(resource)
+Service --> Service: ok
+Service -> EditBookMapper: create(resource)
+EditBookMapper --> Book**: create(CreateBookRequest request)
+EditBookMapper --> Service: book
+Service -> Repo: save(book)
+Repo --> Service: book
+Service --> Ctrl: book
+Ctrl -> ViewMapper: toBookView(book)
+ViewMapper --> Ctrl: bookView
+Ctrl --> Result**: create(201, bookView)
+Ctrl --> System: result
+System -> System: setHttpResult(resp, result)
+System --> HTTPClient: resp
+
+@enduml

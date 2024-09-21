@@ -1,0 +1,31 @@
+@startuml
+actor Librarian
+autonumber
+
+Librarian -> LendingController: GET api/lending-genre/{genreId}
+activate LendingController
+
+LendingController -> GenreServiceImpl: getGenreById(genreId)
+activate GenreServiceImpl
+
+GenreServiceImpl -> GenreRepository: findGenreById(id)
+activate GenreRepository
+GenreRepository -> GenreServiceImpl: Optional<Genre>
+deactivate GenreRepository
+GenreServiceImpl -> LendingController: Optional<Genre>
+deactivate GenreServiceImpl
+
+LendingController -> LendingServiceImpl: numberOfLendingsPerMonthByGenre(genre)
+activate LendingServiceImpl
+
+LendingServiceImpl -> LendingRepository: numberOfLendingsPerMonthByGenre(genre)
+activate LendingRepository
+LendingRepository -> LendingServiceImpl: List<Object[]>
+deactivate LendingRepository
+
+LendingServiceImpl -> LendingController: Map<Integer, Long>
+deactivate LendingServiceImpl
+
+LendingController -> Librarian: HTTP 200 OK Map<Integer, Long>
+deactivate LendingController
+@enduml

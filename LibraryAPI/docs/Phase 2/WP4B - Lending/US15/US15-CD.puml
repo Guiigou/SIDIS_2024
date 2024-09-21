@@ -1,0 +1,41 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class Lending {
+    - id: Long
+    - lendingCode: String
+    - version: long
+    - readerId: Long
+    - bookId: Long
+    - bookTitle: String
+    - daysTillReturn: Integer
+    - daysOverdue: Integer
+    - fine: Float
+    - returned: boolean
+    - comment: String
+}
+
+class LendingController {
+    + getAverageLendingDuration(): double
+}
+
+class LendingServiceImpl {
+    + getAverageLendingDuration(): double
+}
+
+interface LendingRepository <<interface>> {
+    + findAll(): List<Lending>
+}
+
+LendingController ..> LendingServiceImpl : uses
+LendingServiceImpl ..> LendingRepository : uses
+LendingRepository ..> Lending : accesses
+
+Lending "1" *-- "1" lendDate
+Lending "1" *-- "1" returnedDate
+Lending "1" *-- "1" limitDate
+
+@enduml

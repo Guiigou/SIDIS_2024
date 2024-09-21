@@ -1,0 +1,68 @@
+@startuml
+'https://plantuml.com/class-diagram
+left to right direction
+
+hide circle
+skinparam classAttributeIconSize 0
+
+class RouteHandler {
+    +createBook(CreateBookRequest resource,MultipartFile coverPhoto): HttpResult
+}
+
+class BookController {
+    +createBook(CreateBookRequest resource,MultipartFile coverPhoto): Result
+    +toCreateBookView(book)
+}
+
+class BookServiceImpl {
+    -validateCreateBookRequest(resource);
+    +createBook(final CreateBookRequest resource, MultipartFile coverPhoto)
+    +doUploadFile(book.getId().toString(), coverPhoto);
+}
+
+class EditBookMapper {
+    +create(resource)
+}
+
+class Book {
+    - isbn
+    - title
+    - bookAuthors
+    - description
+    Book(isbn, title,bookAuthors, description=None)
+}
+
+class BookCover {
+    - id
+    - image
+    - contentType
+}
+
+class BookRepository {
+    +save(book): Result
+}
+
+class HttpResult {
+    -status: HttpStatus
+    -result: json
+    HttpResult(HttpStatus status, const json &result);
+}
+
+class BookViewMapper
+{
+    + toCreateBookView(book)
+}
+
+
+RouteHandler ..> BookController
+BookController ..> BookServiceImpl
+BookController ..> BookViewMapper
+BookServiceImpl ..> BookRepository
+BookServiceImpl ..> Book
+BookServiceImpl ..> EditBookMapper
+BookRepository ..> BookController
+BookController ..> HttpResult
+
+Book "1" *-- "1" BookCover
+
+@enduml
