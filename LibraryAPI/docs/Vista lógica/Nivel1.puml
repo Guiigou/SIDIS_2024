@@ -1,0 +1,17 @@
+@startuml
+ 'https://plantuml.com/class-diagram
+
+ hide circle
+ skinparam classAttributeIconSize 0
+
+
+component System {
+}
+component Http_Client {
+
+}
+
+System -right0)- Http_Client
+
+
+@enduml
