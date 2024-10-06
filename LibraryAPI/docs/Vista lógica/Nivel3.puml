@@ -1,0 +1,32 @@
+@startuml
+ 'https://plantuml.com/class-diagram
+
+ hide circle
+ skinparam classAttributeIconSize 0
+
+title Vista lógica nível 3
+
+component System {
+ frame "Microservices" {
+           [User and Reader Service]
+           [Book Service]
+           [Lending Service]
+         }
+}
+
+System ~up~ boundary
+
+rectangle "Database 1" {
+}
+
+rectangle "Database 2" {
+}
+
+rectangle "Database 3" {
+ }
+[User and Reader Service] --> "User Database":SQL
+[Book Service] --> "Book Database":SQL
+[Lending Service] --> "Lending Database":SQL
+
+
+@enduml

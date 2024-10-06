@@ -1,10 +1,16 @@
 @startuml
  'https://plantuml.com/class-diagram
 
+title Vista fisica nível 2
+
  hide circle
  skinparam classAttributeIconSize 0
 
+node {
+    agent BE
+    agent DB
+}
 
-Author "1" *-down- "1" AuthorPhoto
+BE -- DB
 
 @enduml

@@ -4,19 +4,19 @@
  hide circle
  skinparam classAttributeIconSize 0
 
+title Vista lógica nível 2
 
 component System {
  rectangle BE {
  }
+
  rectangle DB {
   }
 }
-component Http_Client {
 
-}
+BE -up- DB : SQL
 
-boundary     "boundary"    as boundaryVeryLOOOOOOOOOOOOOOOOOOOg
-System -- boundary
+System ~up~ boundary
 
 
 @enduml

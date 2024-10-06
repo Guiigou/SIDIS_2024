@@ -1,15 +1,20 @@
 @startuml
  'https://plantuml.com/class-diagram
 
+title Vista lógica nível 1
+
  hide circle
  skinparam classAttributeIconSize 0
 
 
-component System {
-}
-component Http_Client {
+component System [
+  System
+  LMS
+]
+component Http_Client [
+    Http client
+]
 
-}
 
 System -right0)- Http_Client
 
