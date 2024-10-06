@@ -6,27 +6,25 @@
 
 title Vista lógica nível 3
 
-component System {
- frame "Microservices" {
-           [User and Reader Service]
-           [Book Service]
-           [Lending Service]
-         }
+component "BE" {
+    [Router]
+    [Controler]
+    [Service]
+    [Domain]
+    [Repository]
+    [JPA]
 }
+boundary " "
+[Router] ~up~ boundary :REST API
+[Router] -down(0- [Controler]
+[Controler] -down(0- [Service]
+[Service] -down(0- [Domain]
+[Repository] -left(0- [Domain]
+[Service] -left(0- [Repository]
+[Repository] -up(0- [JPA]
+[JPA] -up(0- " ":SQL
 
-System ~up~ boundary
 
-rectangle "Database 1" {
-}
-
-rectangle "Database 2" {
-}
-
-rectangle "Database 3" {
- }
-[User and Reader Service] --> "User Database":SQL
-[Book Service] --> "Book Database":SQL
-[Lending Service] --> "Lending Database":SQL
 
 
 @enduml

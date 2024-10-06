@@ -11,6 +11,6 @@ node {
     agent DB
 }
 
-BE -- DB
+BE -- DB : TCP
 
 @enduml

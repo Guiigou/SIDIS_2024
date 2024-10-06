@@ -6,7 +6,7 @@
 
 title Vista lógica nível 2
 
-component System {
+component "<System>" {
  rectangle BE {
  }
 
@@ -16,7 +16,7 @@ component System {
 
 BE -up- DB : SQL
 
-System ~up~ boundary
+"<System>" ~up~ boundary
 
 
 @enduml
