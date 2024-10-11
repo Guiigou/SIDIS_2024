@@ -11,12 +11,9 @@ component System [
   System
   LMS
 ]
-component Http_Client [
-    Http client
-]
 
 
-System -right0)- Http_Client
+System -right0)- " "
 
 
 @enduml

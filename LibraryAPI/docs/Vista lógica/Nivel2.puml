@@ -7,16 +7,20 @@
 title Vista lógica nível 2
 
 component "<System>" {
- rectangle BE {
- }
-
- rectangle DB {
-  }
+           [User Service]
+           [Book Service]
+           [Lending Service]
+           [User Database]
+           [Book Database]
+           [Lending Database]
 }
 
-BE -up- DB : SQL
 
-"<System>" ~up~ boundary
-
-
+'"<System>" ~up~ boundary
+[User Service] ~up~ boundary1
+[User Service] -down(0- [User Database] : SQL
+[Book Service] ~up~ boundary2
+[Book Service] -down(0- [Book Database] : SQL
+[Lending Service] ~up~ boundary3
+[Lending Service] -down(0- [Lending Database] : SQL
 @enduml
