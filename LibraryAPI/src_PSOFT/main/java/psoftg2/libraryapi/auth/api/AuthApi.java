@@ -53,9 +53,8 @@ public class AuthApi {
 			final User user = (User) authentication.getPrincipal();
 
 			final Instant now = Instant.now();
-			//final long expiry = 36000L; // 1 hour is usually too long for a token to be valid. adjust for production
-			final long expiry = 2592000L; // 1 month
-
+			//final long expiry = 1200L; // 2 minutes
+			final long expiry = 2592000L; // 1 month is usually too long for a token to be valid. adjust for production
 			final String scope = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
 					.collect(joining(" "));
 

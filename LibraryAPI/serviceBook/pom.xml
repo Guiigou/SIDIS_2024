@@ -1,22 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.5</version> <!-- Certifica-te que estás a usar o spring-boot-starter-parent -->
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>psoftg2</groupId>
+        <artifactId>LibraryAPI</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath> <!-- Caminho relativo para o projeto pai -->
     </parent>
 
-    <groupId>psoftg2</groupId>
-    <artifactId>LibraryAPI</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>pom</packaging>
-    <name>LibraryAPI</name>
-    <description>Projeto microserviços para a API de biblioteca</description>
+    <artifactId>serviceBook</artifactId>
+    <name>Service Book</name>
+    <description>Serviço de Gestão de Livros</description>
 
     <properties>
         <java.version>22</java.version>
@@ -25,14 +20,6 @@
         <maven.compiler.release>22</maven.compiler.release>
         <m2e.apt.activation>jdt_apt</m2e.apt.activation>
     </properties>
-
-    <!-- Definir os módulos do projeto -->
-    <modules>
-        <module>serviceAuth</module>
-        <module>serviceReader</module>
-        <module>serviceBook</module>
-        <module>serviceLending</module>
-    </modules>
 
     <dependencies>
         <dependency>
