@@ -11,7 +11,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
+import psoftg2.libraryapi.authorManagement.api.AuthorView;
 import psoftg2.libraryapi.authorManagement.model.Author;
+import psoftg2.libraryapi.bookManagement.api.BookAuthorView;
+import psoftg2.libraryapi.bookManagement.api.BookGenreView;
+import psoftg2.libraryapi.bookManagement.api.LentBookView;
 import psoftg2.libraryapi.bookManagement.model.BookAuthor;
 import psoftg2.libraryapi.authorManagement.repository.AuthorRepository;
 import psoftg2.libraryapi.bookManagement.model.Book;
@@ -27,8 +31,9 @@ import psoftg2.libraryapi.exceptions.NotFoundException;
 import psoftg2.libraryapi.fileStorage.FileStorageService;
 import psoftg2.libraryapi.fileStorage.UploadFileResponse;
 import org.springframework.data.domain.PageImpl;
-//import psoftg2.libraryapi.lendingManagement.repositories.LendingRepository;
-
+import psoftg2.libraryapi.client.LendingServiceClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.*;
@@ -47,11 +52,13 @@ public class BookServiceImpl implements BookService{
     private final GenreRepository genreRepository;
     private final FileStorageService fileStorageService;
     private final EditBookMapper editBookMapper;
+    private final LendingServiceClient lendingServiceClient;
+
 
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository, /*LendingRepository lendingRepository,*/ BookCoverRepository bookCoverRepository, AuthorRepository authorRepository, BookAuthorRepository bookAuthorRepository, EditBookMapper editBookMapper, GenreRepository genreRepository, FileStorageService fileStorageService, RestTemplate restTemplate) {
+    public BookServiceImpl(BookRepository bookRepository, /*LendingRepository lendingRepository,*/ BookCoverRepository bookCoverRepository, AuthorRepository authorRepository, BookAuthorRepository bookAuthorRepository, EditBookMapper editBookMapper, GenreRepository genreRepository, FileStorageService fileStorageService, RestTemplate restTemplate, LendingServiceClient lendingServiceClient) {
         this.bookRepository = bookRepository;
-        //this.lendingRepository = lendingRepository;
+        this.lendingServiceClient = lendingServiceClient;
         this.bookCoverRepository = bookCoverRepository;
         this.authorRepository = authorRepository;
         this.bookAuthorRepository = bookAuthorRepository;
@@ -77,16 +84,38 @@ public class BookServiceImpl implements BookService{
         return bookRepository.findTopGenres();
     }
 
-    /*
-    public Iterable<Book> getTopBooks() {
-        return lendingRepository.findTopBookIds().stream()
-                .map(record -> (Long) record[0])
-                .map(bookId -> bookRepository.findById(bookId).orElse(null))
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+    public List<LentBookView> getTopBooks() {
+        List<LentBookView> lentBooks = lendingServiceClient.getTopBooks();
+
+        return lentBooks.stream().map(lentBook -> {
+            //System.out.println("Book ID: " + lentBook.getBookId());
+            Book book = bookRepository.findById(lentBook.getBookId()).orElse(null);
+            if (book != null) {
+                LentBookView lentBookView = new LentBookView();
+                lentBookView.setBookId(book.getId());
+                lentBookView.setIsbn(book.getIsbn());
+                lentBookView.setTitle(book.getTitle());
+                lentBookView.setDescription(book.getDescription());
+
+                BookGenreView genreView = new BookGenreView();
+                genreView.setName(book.getGenre().getName());
+                lentBookView.setGenre(genreView);
+
+                List<AuthorView> authorViews = book.getBookAuthors().stream()
+                        .map(bookAuthor -> {
+                            AuthorView authorView = new AuthorView();
+                            authorView.setId(bookAuthor.getAuthor().getId());
+                            authorView.setName(bookAuthor.getAuthor().getName());
+                            return authorView;
+                        }).collect(Collectors.toList());
+                lentBookView.setBookAuthors(authorViews);
+
+                return lentBookView;
+            }
+            return null;
+        }).collect(Collectors.toList());
     }
 
-     */
 
     public Page<Book> getBooksByGenre(final String genre, Pageable pageable) {
         List<Book> filteredBooks = bookRepository.findAll().stream()
@@ -267,11 +296,5 @@ public class BookServiceImpl implements BookService{
         return new PageImpl<>(sublist, pageable, books.size());
     }
 
-    public List<String> getUserRolesFromAuthService(String username) {
-        String authServiceUrl = "http://localhost:8081/api/auth/roles/" + username;
-
-        ResponseEntity<String[]> response = restTemplate.getForEntity(authServiceUrl, String[].class);
-        return Arrays.asList(response.getBody());
-    }
 
 }

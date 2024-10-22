@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import psoftg2.libraryapi.lendingManagement.api.LendingAvgPerBookView;
 import psoftg2.libraryapi.lendingManagement.api.LendingAvgPerGenrePerMonthView;
+import psoftg2.libraryapi.lendingManagement.api.LentBookView;
 import psoftg2.libraryapi.lendingManagement.model.Lending;
 import java.util.List;
 import java.util.Map;
@@ -24,4 +25,6 @@ public interface LendingService {
     //Iterable<LendingAvgPerGenrePerMonthView> getAverageLendingDurationPerGenrePerMonth(LocalDate startDate, LocalDate endDate);
     //Lending createLending(CreateLendingRequest resource);
     Lending returnBook(EditLendingRequest resource);
+
+    List<LentBookView> getTopBooks();
 }

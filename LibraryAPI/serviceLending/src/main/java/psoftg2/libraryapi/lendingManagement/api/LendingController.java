@@ -139,6 +139,14 @@ public class LendingController {
         }
         return Long.parseLong(ifMatchHeader);
     }
+
+
+    //Backend Endpoints
+    @GetMapping("/top-books")
+    public ResponseEntity<List<LentBookView>> getTopBooks() {
+        List<LentBookView> topBooks = lendingService.getTopBooks();
+        return ResponseEntity.ok(topBooks);
+    }
 }
 
 

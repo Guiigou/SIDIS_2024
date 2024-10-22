@@ -86,7 +86,7 @@ public class AuthApi {
 		Jwt jwt = jwtDecoder.decode(token);
 		String username = jwt.getClaimAsString("sub");
 
-		User user = userService.loadUserByUsername(username); // Busca o utilizador pelo username
+		User user = userService.loadUserByUsername(username); // Search user by username
 		if (user == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}

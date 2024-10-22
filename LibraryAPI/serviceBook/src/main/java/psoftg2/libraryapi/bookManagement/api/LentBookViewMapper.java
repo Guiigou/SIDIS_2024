@@ -27,7 +27,6 @@ public class LentBookViewMapper {
         for (Lending lending : lendings) {
             lendingsList.add(lending);
         }
-        lentBookView.setLentCount(countLentsForBook(book, lendingsList));
         lentBookView.setId( book.getId() );
         lentBookView.setIsbn( book.getIsbn() );
         lentBookView.setTitle( book.getTitle() );

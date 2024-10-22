@@ -137,17 +137,14 @@ public class BookController {
         return genreViewMapper.toGenreView(bookService.getTopGenres(), bookService.getAllBooks());
     }
 
-/*
     @Operation(summary = "Gets top 5 Books lent")
     @GetMapping("/top-books")
-    @RolesAllowed({Role.LIBRARIAN, Role.ADMIN})
     @ApiResponse(description = "Success", responseCode = "200", content = { @Content(mediaType = "application/json",
-            array = @ArraySchema(schema = @Schema(implementation = BookView.class))) })
-    public Iterable<LentBookView> getTopBooks() {
-        return lentBookViewMapper.toLentBookView(bookService.getTopBooks(), lendingService.getAllLendings());
+            array = @ArraySchema(schema = @Schema(implementation = LentBookView.class))) })
+    public ResponseEntity<List<LentBookView>> getTopBooks() {
+        List<LentBookView> topBooks = bookService.getTopBooks();
+        return ResponseEntity.ok(topBooks);
     }
-
- */
 
     @Operation(summary = "Downloads a cover of a book by id")
     @GetMapping("/{bookId}/cover")

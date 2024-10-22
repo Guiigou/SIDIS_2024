@@ -58,10 +58,10 @@ public class BootStrap implements CommandLineRunner {
       Lending lending15 = new Lending("2024/15", 15L, 15L, "Frankenstein", LocalDate.of(2024, 7, 12), LocalDate.of(2024, 7, 26), LocalDate.of(2024, 7, 19), true, 0.0f, "");
 
       Lending lending16 = new Lending("2024/16", 16L, 16L, "Odisseia", LocalDate.of(2024, 8, 13), LocalDate.of(2024, 8, 27), LocalDate.of(2024, 8, 20), true, 0.0f, "");
-      Lending lending17 = new Lending("2024/17", 17L, 17L, "O Morro dos Ventos Uivantes", LocalDate.of(2024, 9, 14), LocalDate.of(2024, 9, 28), LocalDate.of(2024, 9, 21), true, 0.0f, "");
-      Lending lending18 = new Lending("2024/18", 18L, 18L, "O Retrato de Dorian Gray", LocalDate.of(2024, 10, 15), LocalDate.of(2024, 10, 29), LocalDate.of(2024, 10, 22), true, 0.0f, "");
-      Lending lending19 = new Lending("2024/19", 19L, 19L, "O Sol é Para Todos", LocalDate.of(2024, 11, 16), LocalDate.of(2024, 11, 30), LocalDate.of(2024, 11, 23), false, 2.5f, "");
-      Lending lending20 = new Lending("2024/20", 20L, 20L, "As Mil e Uma Noites", LocalDate.of(2024, 12, 17), LocalDate.of(2024, 12, 31), LocalDate.of(2024, 12, 24), true, 0.0f, "");
+      Lending lending17 = new Lending("2024/17", 17L, 16L, "Odisseia", LocalDate.of(2024, 9, 14), LocalDate.of(2024, 9, 28), LocalDate.of(2024, 9, 21), true, 0.0f, "");
+      Lending lending18 = new Lending("2024/18", 18L, 16L, "Odisseia", LocalDate.of(2024, 10, 15), LocalDate.of(2024, 10, 29), LocalDate.of(2024, 10, 22), true, 0.0f, "");
+      Lending lending19 = new Lending("2024/19", 19L, 16L, "Odisseia", LocalDate.of(2024, 11, 16), LocalDate.of(2024, 11, 30), LocalDate.of(2024, 11, 23), false, 2.5f, "");
+      Lending lending20 = new Lending("2024/20", 20L, 16L, "Odisseia", LocalDate.of(2024, 12, 17), LocalDate.of(2024, 12, 31), LocalDate.of(2024, 12, 24), true, 0.0f, "");
 
       Lending lending21 = new Lending("2024/21", 21L, 21L, "A Revolução dos Bichos", LocalDate.of(2024, 1, 18), LocalDate.of(2024, 2, 1), LocalDate.of(2024, 1, 25), true, 0.0f, "");
       Lending lending22 = new Lending("2024/22", 22L, 22L, "As Crónicas de Nárnia", LocalDate.of(2024, 3, 19), LocalDate.of(2024, 4, 2), LocalDate.of(2024, 3, 26), true, 0.0f, "");

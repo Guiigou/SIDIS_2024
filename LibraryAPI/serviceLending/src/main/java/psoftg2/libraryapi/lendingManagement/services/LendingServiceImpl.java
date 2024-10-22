@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import psoftg2.libraryapi.lendingManagement.api.LendingAvgPerBookView;
-import psoftg2.libraryapi.lendingManagement.api.LendingAvgPerBookViewMapper;
-import psoftg2.libraryapi.lendingManagement.api.LendingAvgPerGenrePerMonthView;
-import psoftg2.libraryapi.lendingManagement.api.LendingAvgPerGenrePerMonthViewMapper;
+import psoftg2.libraryapi.lendingManagement.api.*;
 import psoftg2.libraryapi.exceptions.NotFoundException;
 import psoftg2.libraryapi.lendingManagement.model.Lending;
 import psoftg2.libraryapi.lendingManagement.repositories.LendingRepository;
@@ -16,6 +13,7 @@ import psoftg2.libraryapi.lendingManagement.repositories.LendingRepository;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class LendingServiceImpl implements LendingService {
@@ -181,6 +179,15 @@ public class LendingServiceImpl implements LendingService {
         returnedLending.setComment(resource.getComment());
 
         return lendingRepository.save(returnedLending);
+    }
+
+    @Override
+    public List<LentBookView> getTopBooks() {
+        List<Object[]> topBookIds = lendingRepository.findTopBookIds();
+
+        return topBookIds.stream()
+                .map(record -> new LentBookView((Long) record[0], (Long) record[1]))
+                .collect(Collectors.toList());
     }
 
     private float calculateFine(long daysOverdue) {
