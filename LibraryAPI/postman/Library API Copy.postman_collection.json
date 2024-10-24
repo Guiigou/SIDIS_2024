@@ -1,10 +1,10 @@
 {
 	"info": {
-		"_postman_id": "f4b24457-8fae-409c-89de-91946f50e42a",
-		"name": "Library API",
+		"_postman_id": "1b9767c6-91c5-4725-b992-ce4e64eef043",
+		"name": "Library API Copy",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29809506",
-		"_collection_link": "https://sidis6.postman.co/workspace/SIDIS-Workspace~0278ab01-b81e-4cde-8bc8-4d6349c0fa8e/collection/33806037-f4b24457-8fae-409c-89de-91946f50e42a?action=share&source=collection_link&creator=29809506"
+		"_collection_link": "https://web.postman.co/workspace/SIDIS-Workspace~0278ab01-b81e-4cde-8bc8-4d6349c0fa8e/collection/29809506-1b9767c6-91c5-4725-b992-ce4e64eef043?source=collection_link"
 	},
 	"item": [
 		{
@@ -79,16 +79,16 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/books/9798666830864",
+							"raw": "http://localhost:8082/api/books/9780062316110",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books",
-								"9798666830864"
+								"9780062316110"
 							]
 						}
 					},
@@ -171,12 +171,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/books",
+							"raw": "http://localhost:8082/api/books",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books"
@@ -264,12 +264,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/books/top-genres",
+							"raw": "http://localhost:8082/api/books/top-genres",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books",
@@ -357,12 +357,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/books/top-books",
+							"raw": "http://localhost:8082/api/books/top-books",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books",
@@ -413,12 +413,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/books/5/cover",
+							"raw": "http://localhost:8082/api/books/5/cover",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books",
@@ -491,12 +491,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/books/5/cover",
+							"raw": "http://localhost:8082/api/books/5/cover",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books",
@@ -580,12 +580,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/books",
+							"raw": "http://localhost:8082/api/books",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books"
@@ -662,16 +662,16 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/books/3",
+							"raw": "http://localhost:8082/api/books/5",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books",
-								"3"
+								"5"
 							]
 						}
 					},
@@ -730,12 +730,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/books/4",
+							"raw": "http://localhost:8082/api/books/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"books",
@@ -817,12 +817,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/readers/2",
+							"raw": "http://localhost:8084/api/readers/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers",
@@ -920,12 +920,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/readers",
+							"raw": "http://localhost:8084/api/readers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers"
@@ -1019,12 +1019,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/readers/monthly-lending",
+							"raw": "http://localhost:8084/api/readers/monthly-lending",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers",
@@ -1123,12 +1123,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/readers/top-readers/1",
+							"raw": "http://localhost:8084/api/readers/top-readers/1",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers",
@@ -1211,12 +1211,12 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:8080/api/readers/top-readers",
+							"raw": "http://localhost:8084/api/readers/top-readers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers",
@@ -1279,12 +1279,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/readers/21/photo",
+							"raw": "http://localhost:8084/api/readers/21/photo",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers",
@@ -1342,12 +1342,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/readers",
+							"raw": "http://localhost:8084/api/readers",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers"
@@ -1414,12 +1414,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/readers/5/photo",
+							"raw": "http://localhost:8084/api/readers/5/photo",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers",
@@ -1480,12 +1480,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/readers/2",
+							"raw": "http://localhost:8084/api/readers/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers",
@@ -1545,12 +1545,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/readers/5",
+							"raw": "http://localhost:8084/api/readers/5",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8084",
 							"path": [
 								"api",
 								"readers",
@@ -1634,12 +1634,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/authors/name",
+							"raw": "http://localhost:8082/api/authors/name",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -1726,12 +1726,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/authors",
+							"raw": "http://localhost:8082/api/authors",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors"
@@ -1797,12 +1797,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/authors/top-authors",
+							"raw": "http://localhost:8082/api/authors/top-authors",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -1906,12 +1906,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/authors/1/co-authors",
+							"raw": "http://localhost:8082/api/authors/1/co-authors",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -1998,12 +1998,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/authors/2/books",
+							"raw": "http://localhost:8082/api/authors/2/books",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -2076,12 +2076,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/authors/2",
+							"raw": "http://localhost:8082/api/authors/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -2144,12 +2144,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/authors/10/photo",
+							"raw": "http://localhost:8082/api/authors/10/photo",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -2240,12 +2240,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/authors",
+							"raw": "http://localhost:8082/api/authors",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors"
@@ -2329,12 +2329,12 @@
 							]
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/authors/10/photo",
+							"raw": "http://localhost:8082/api/authors/10/photo",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -2407,12 +2407,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/authors/3",
+							"raw": "http://localhost:8082/api/authors/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -2499,12 +2499,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/authors/2",
+							"raw": "http://localhost:8082/api/authors/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8082",
 							"path": [
 								"api",
 								"authors",
@@ -2579,12 +2579,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/lendings",
+							"raw": "http://localhost:8083/api/lendings",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings"
@@ -2638,12 +2638,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/lendings/average",
+							"raw": "http://localhost:8083/api/lendings/average",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings",
@@ -2715,12 +2715,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/lendings/40",
+							"raw": "http://localhost:8083/api/lendings/40",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings",
@@ -2772,12 +2772,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/lendings/average-per-genre/2024-05-01",
+							"raw": "http://localhost:8083/api/lendings/average-per-genre/2024-05-01",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings",
@@ -2835,12 +2835,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/lendings/lending-genre/2",
+							"raw": "http://localhost:8083/api/lendings/lending-genre/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings",
@@ -2906,12 +2906,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/lendings/overdue",
+							"raw": "http://localhost:8083/api/lendings/overdue",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings",
@@ -2969,12 +2969,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/lendings/average-duration-per-genre?startDate=2024-05-01&endDate=2024-05-30",
+							"raw": "http://localhost:8083/api/lendings/average-duration-per-genre?startDate=2024-05-01&endDate=2024-05-30",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings",
@@ -3042,12 +3042,12 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8080/api/lendings/average-per-book",
+							"raw": "http://localhost:8083/api/lendings/average-per-book",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings",
@@ -3115,12 +3115,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/lendings",
+							"raw": "http://localhost:8083/api/lendings",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings"
@@ -3199,12 +3199,12 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8080/api/lendings/return",
+							"raw": "http://localhost:8083/api/lendings/return",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8083",
 							"path": [
 								"api",
 								"lendings",
