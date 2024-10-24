@@ -1,19 +1,23 @@
 @startuml
- 'https://plantuml.com/class-diagram
+' https://plantuml.com/class-diagram
 
-title Vista lógica nível 1
+hide circle
 
- hide circle
- skinparam classAttributeIconSize 0
+title Vista Lógica Nível 1
 
+' Definir o componente principal LMS
+component LMS
 
-component System [
-  System
-  LMS
-]
+' Definir as "bolinhas" externas que representam os microserviços
+interface "Reader Service" as US
+interface "Book Service" as BS
+interface "Lending Service" as LS
+interface "Authentication Service" as AS
 
-
-System -right0)- " "
-
+' Colocar os microserviços em cima do LMS e conectá-los com linhas verticais retas para cima
+US -down- LMS
+BS -down- LMS
+LS -down- LMS
+AS -down- LMS
 
 @enduml
