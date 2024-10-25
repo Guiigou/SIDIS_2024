@@ -75,18 +75,28 @@ public class AuthApi {
 
 	@PostMapping("register")
 	public UserView register(@RequestBody @Valid final CreateUserRequest request) {
+		System.out.println("Request to register user: " + request);
 		final var user = userService.create(request);
+		System.out.println("feito userService.create: " + request);
 		return userViewMapper.toUserView(user);
 	}
 
 	@GetMapping("/roles")
 	public ResponseEntity<List<String>> getUserRoles(@RequestHeader("Authorization") String authorization) {
 		String token = authorization.replace("Bearer ", "");
+		System.out.println("Este é o token: " + token);
 
 		Jwt jwt = jwtDecoder.decode(token);
-		String username = jwt.getClaimAsString("sub");
+		String subject = jwt.getClaimAsString("sub");
+		System.out.println("Este é o subject completo: " + subject);
+
+		// To separate id from username
+		String username = subject.split(",")[1];
+		System.out.println("Este é o username extraído: " + username);
+
 
 		User user = userService.loadUserByUsername(username); // Search user by username
+		System.out.println("Este é o user q saiu: " + user);
 		if (user == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
@@ -94,6 +104,8 @@ public class AuthApi {
 		List<String> roles = user.getAuthorities().stream()
 				.map(GrantedAuthority::getAuthority)
 				.collect(Collectors.toList());
+
+		System.out.println("Estes são os roles: " + roles);
 
 		return ResponseEntity.ok(roles);
 	}

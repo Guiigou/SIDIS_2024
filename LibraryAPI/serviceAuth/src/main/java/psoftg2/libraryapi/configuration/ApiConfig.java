@@ -33,7 +33,7 @@ public class ApiConfig {
 		return new OpenAPI().addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"))
 				.components(new Components().addSecuritySchemes("Bearer Authentication", createAPIKeyScheme()))
 				.info(new Info().title("Library API").description("Library API").version("v1.0")
-						.contact(new Contact().name("Catarina Gomes").email("1221238@isep.ipp.pt")).termsOfService("TOC")
+						.description("Library API\n\nContact Information:\n- Catarina Gomes\nEmail: 1221238@isep.ipp.pt\n- Guilherme Gouveia\nEmail: 1221795@isep.ipp.pt")
 						.license(new License().name("MIT").url("#")));
 	}
 

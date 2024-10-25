@@ -26,16 +26,21 @@ public class UserService implements UserDetailsService {
 
 	@Transactional
 	public User create(final CreateUserRequest request) {
+		System.out.println("Entrou em userService create " + request);
 		if (userRepo.findByUsername(request.getUsername()).isPresent()) {
 			throw new ConflictException("Username already exists!");
 		}
+		System.out.println("Username ainda não existe" + request);
 		if (!request.getPassword().equals(request.getRePassword())) {
 			throw new ValidationException("Passwords don't match!");
 		}
+		System.out.println("passwords fazem match" + request);
 
 		final User user = userEditMapper.create(request);
+		System.out.println("Fez userEditMapper" + request);
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
-
+		System.out.println("Fez setPassword" + request);
+		System.out.println("Vai entrar no userRepo" + request);
 		return userRepo.save(user);
 	}
 

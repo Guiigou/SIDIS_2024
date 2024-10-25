@@ -12,8 +12,14 @@ import static java.util.stream.Collectors.toSet;
 @Mapper(componentModel = "spring")
 public abstract class EditUserMapper {
 
+	@Mapping(source = "username", target = "username") // Adicione esta linha
 	@Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringToRole")
 	public abstract User create(CreateUserRequest request);
+	@AfterMapping
+	protected void logAfterMapping(@MappingTarget User user) {
+		System.out.println("Mapped User: " + user);
+	}
+
 
 	@BeanMapping(nullValueCheckStrategy = NullValueCheckStrategy.ALWAYS, nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 	@Mapping(source = "authorities", target = "authorities", qualifiedByName = "stringToRole")

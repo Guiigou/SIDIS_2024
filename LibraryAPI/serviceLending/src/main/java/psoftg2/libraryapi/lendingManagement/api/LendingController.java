@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import psoftg2.libraryapi.client.AuthServiceClient;
 import psoftg2.libraryapi.lendingManagement.model.Lending;
 import psoftg2.libraryapi.lendingManagement.services.CreateLendingRequest;
 import psoftg2.libraryapi.lendingManagement.services.EditLendingRequest;
@@ -35,6 +37,16 @@ public class LendingController {
     private static final String IF_MATCH = "If-Match";
     private final LendingServiceImpl lendingService;
     private final LendingViewMapper lendingViewMapper;
+    private final AuthServiceClient authServiceClient;
+
+    private boolean hasPermission(List<String> roles, String... allowedRoles) {
+        for (String role : allowedRoles) {
+            if (roles.contains(role)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Operation(summary = "Gets all Lendings")
     @GetMapping
@@ -42,7 +54,15 @@ public class LendingController {
             @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = LendingView.class)))})
     public List<LendingView> getLendingsPage(
             @RequestParam(defaultValue = "0", required = false) int page,
-            @RequestParam(defaultValue = "100", required = false) int size) {
+            @RequestParam(defaultValue = "100", required = false) int size,
+            @RequestHeader("Authorization") String authorization) {
+        String token = authorization.replace("Bearer ", ""); // Token from header
+
+        // Check permissions
+        List<String> roles = authServiceClient.getUserRoles(token);
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Lending> lendingsPage = lendingService.getLendings(pageable);
@@ -51,7 +71,15 @@ public class LendingController {
 
     @Operation(summary = "Gets a specific Lending")
     @GetMapping("/{lendingId}")
-    public ResponseEntity<LendingView> getLending(@PathVariable("lendingId") Long id) {
+    public ResponseEntity<LendingView> getLending(@PathVariable("lendingId") Long id,
+                                                  @RequestHeader("Authorization") String authorization) {
+        String token = authorization.replace("Bearer ", ""); // Token from header
+
+        // Check permissions
+        List<String> roles = authServiceClient.getUserRoles(token);
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         final var lending = lendingService.getLending(id).orElseThrow(() -> new NotFoundException(Lending.class, id));
 
         return ResponseEntity.ok().eTag(Long.toString(lending.getVersion())).body(lendingViewMapper.toLendingView(lending));
@@ -61,7 +89,15 @@ public class LendingController {
     @GetMapping("/overdue")
     public List<LendingView> getOverdue(
             @RequestParam(defaultValue = "0", required = false) int page,
-            @RequestParam(defaultValue = "100", required = false) int size) {
+            @RequestParam(defaultValue = "100", required = false) int size,
+            @RequestHeader("Authorization") String authorization) {
+        String token = authorization.replace("Bearer ", ""); // Token from header
+
+        // Check permissions
+        List<String> roles = authServiceClient.getUserRoles(token);
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Lending> overdueLendingsPage = lendingService.getOverdueLendings(pageable);
@@ -70,7 +106,14 @@ public class LendingController {
 
     @Operation(summary = "Gets average lending duration")
     @GetMapping("/average")
-    public double getAverageLendingDuration() {
+    public double getAverageLendingDuration(@RequestHeader("Authorization") String authorization) {
+        String token = authorization.replace("Bearer ", ""); // Token from header
+
+        // Check permissions
+        List<String> roles = authServiceClient.getUserRoles(token);
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         return lendingService.getAverageLendingDuration();
     }
 
@@ -93,7 +136,14 @@ public class LendingController {
 
     @Operation(summary = "Gets average lending duration per book")
     @GetMapping("/average-per-book")
-    public Iterable<LendingAvgPerBookView> getAverageLendingDurationPerBook() {
+    public Iterable<LendingAvgPerBookView> getAverageLendingDurationPerBook(@RequestHeader("Authorization") String authorization) {
+        String token = authorization.replace("Bearer ", ""); // Token from header
+
+        // Check permissions
+        List<String> roles = authServiceClient.getUserRoles(token);
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         return lendingService.getAverageLendingDurationPerBook();
     }
  /*
@@ -123,7 +173,15 @@ public class LendingController {
     @Operation(summary = "Return a Book")
     @PostMapping("/return")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<LendingView> returnBook(@Valid @RequestBody final EditLendingRequest resource) {
+    public ResponseEntity<LendingView> returnBook(@Valid @RequestBody final EditLendingRequest resource,
+                                                  @RequestHeader("Authorization") String authorization) {
+        String token = authorization.replace("Bearer ", ""); // Token from header
+
+        // Check permissions
+        List<String> roles = authServiceClient.getUserRoles(token);
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         Lending lending = lendingService.returnBook(resource);
 
         final var newbarUri = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(lending.getId().toString())
@@ -134,6 +192,7 @@ public class LendingController {
     }
     
     private Long getVersionFromIfMatchHeader(final String ifMatchHeader) {
+
         if (ifMatchHeader.startsWith("\"")) {
             return Long.parseLong(ifMatchHeader.substring(1, ifMatchHeader.length() - 1));
         }
@@ -144,6 +203,7 @@ public class LendingController {
     //Backend Endpoints
     @GetMapping("/top-books")
     public ResponseEntity<List<LentBookView>> getTopBooks() {
+
         List<LentBookView> topBooks = lendingService.getTopBooks();
         return ResponseEntity.ok(topBooks);
     }

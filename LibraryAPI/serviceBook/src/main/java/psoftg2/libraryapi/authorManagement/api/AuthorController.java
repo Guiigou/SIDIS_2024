@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import psoftg2.libraryapi.authorManagement.model.Author;
 import psoftg2.libraryapi.authorManagement.model.AuthorPhoto;
@@ -72,17 +73,16 @@ public class AuthorController {
             @RequestParam(defaultValue = "100", required = false) int size,
             @RequestHeader("Authorization") String authorization) {
 
-       /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
-        // Roles from AuthService
+        // Check permissions
         List<String> roles = authServiceClient.getUserRoles(token);
-
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-         */
+
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Author> authorPage = authorService.getAuthors(pageable);
@@ -93,7 +93,6 @@ public class AuthorController {
     @GetMapping("/{authorId}")
     public ResponseEntity<AuthorView> getAuthor(@PathVariable("authorId") Long id, @RequestHeader("Authorization") String authorization) {
 
-        /*
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -103,7 +102,6 @@ public class AuthorController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
 
         final var author = authorService.getAuthorsById(id).orElseThrow(() -> new NotFoundException(Author.class, id));
         return ResponseEntity.ok().eTag(Long.toString(author.getVersion())).body(authorViewMapper.toAuthorView(author));
@@ -113,17 +111,17 @@ public class AuthorController {
     @GetMapping("/name")
     public Iterable<AuthorView> getAuthors(@RequestParam String name, @RequestHeader("Authorization") String authorization) {
 
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
 
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-         */
+
 
         return authorViewMapper.toAuthorView(authorService.getAuthorsByName(name));
     }
@@ -136,17 +134,16 @@ public class AuthorController {
             @PathVariable("authorId") Long authorId,
             @RequestHeader("Authorization") String authorization) {
 
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
 
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-         */
 
         Pageable pageable = PageRequest.of(page, size);
         List<BookAuthor> bookAuthors = bookService.getBookAuthorsByAuthorId(authorId);
@@ -202,17 +199,17 @@ public class AuthorController {
             @PathVariable("authorId") Long authorId,
             @RequestHeader("Authorization") String authorization) {
 
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
 
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-         */
+
 
         Pageable pageable = PageRequest.of(page, size);
         List<BookAuthor> bookAuthors = bookService.getBookAuthorsByAuthorId(authorId);
@@ -234,7 +231,7 @@ public class AuthorController {
     @Operation(summary = "Downloads a photo of an author by id")
     @GetMapping("/{authorId}/photo")
     public ResponseEntity<Resource> getBookCover(@PathVariable("authorId") final String authorId, @RequestHeader("Authorization") String authorization) {
-/*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -244,7 +241,7 @@ public class AuthorController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         AuthorPhoto authorPhoto = authorService.getAuthorPhoto(authorId);
         final Resource resource = new ByteArrayResource(authorPhoto.getImage());
@@ -261,17 +258,15 @@ public class AuthorController {
                                                    @RequestPart(value = "authorPhoto", required = false) MultipartFile authorPhoto,
                                                    @RequestHeader("Authorization") String authorization) {
 
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
 
-        if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
-         */
 
         final var author = authorService.createAuthor(resource, authorPhoto);
         final var newbarUri = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(author.getId().toString())
@@ -287,17 +282,16 @@ public class AuthorController {
                                                          @RequestParam("file") final MultipartFile file,
                                                          @RequestHeader("Authorization") String authorization) throws URISyntaxException {
 
-       /*
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
 
-        if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         final UploadFileResponse up = authorService.doUploadFile(authorId, file);
         return ResponseEntity.created(new URI(up.getFileDownloadUri())).body(up);
@@ -310,17 +304,17 @@ public class AuthorController {
                                                    @Valid @RequestBody final EditAuthorRequest resource,
                                                    @RequestHeader("Authorization") String authorization) {
 
-       /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
 
-        if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         final String ifMatchValue = request.getHeader(IF_MATCH);
         if (ifMatchValue == null || ifMatchValue.isEmpty()) {
@@ -338,17 +332,17 @@ public class AuthorController {
                                                           @Valid @RequestBody final EditAuthorRequest resource,
                                                           @RequestHeader("Authorization") String authorization) {
 
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
 
-        if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         final String ifMatchValue = request.getHeader(IF_MATCH);
         if (ifMatchValue == null || ifMatchValue.isEmpty()) {

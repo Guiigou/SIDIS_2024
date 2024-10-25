@@ -57,8 +57,8 @@ public class User implements UserDetails {
 	private boolean enabled = true;
 
 	@Column(unique = true, updatable = false, nullable = false)
-	@Email
 	@Getter
+	@Email
 	@NotNull
 	@NotBlank
 	private String username;
@@ -85,9 +85,12 @@ public class User implements UserDetails {
 		this.username = username;
 		setPassword(password);
 	}
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
 	public User(final String username, final String password, final String fullName) {
-		this.username = username;
+		setUsername(username);
 		setPassword(password);
 		this.fullName = fullName;
 	}

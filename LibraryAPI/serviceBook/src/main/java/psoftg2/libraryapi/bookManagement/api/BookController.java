@@ -68,7 +68,7 @@ public class BookController {
     @Operation(summary = "Gets book by isbn")
     @GetMapping("/{bookIsbn}")
     public ResponseEntity<BookView> getBook(@PathVariable("bookIsbn") String isbn, @RequestHeader("Authorization") String authorization) {
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -78,7 +78,6 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
 
         final var book = bookService.getBook(isbn).orElseThrow(() -> new NotFoundException(Book.class, isbn));
         return ResponseEntity.ok().eTag(Long.toString(book.getVersion())).body(bookViewMapper.toBookView(book));
@@ -94,15 +93,13 @@ public class BookController {
             @RequestParam(defaultValue = "0", required = false) int page,
             @RequestParam(defaultValue = "100", required = false) int size,
             @RequestHeader("Authorization") String authorization) {
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         List<String> roles = authServiceClient.getUserRoles(token);
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
             throw new RuntimeException("Unauthorized access");
         }
-
-         */
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Book> booksPage;
@@ -126,13 +123,13 @@ public class BookController {
     @Operation(summary = "Gets top 5 Genres by book number")
     @GetMapping("/top-genres")
     public Iterable<GenreView> getTopGenres(@RequestHeader("Authorization") String authorization) {
-        /*String token = authorization.replace("Bearer ", ""); // Token from header
+        String token = authorization.replace("Bearer ", ""); // Token from header
 
         List<String> roles = authServiceClient.getUserRoles(token);
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
             throw new RuntimeException("Unauthorized access");
         }
-        */
+
 
         return genreViewMapper.toGenreView(bookService.getTopGenres(), bookService.getAllBooks());
     }
@@ -149,14 +146,12 @@ public class BookController {
     @Operation(summary = "Downloads a cover of a book by id")
     @GetMapping("/{bookId}/cover")
     public ResponseEntity<Resource> getBookCover(@PathVariable("bookId") final String bookId, final HttpServletRequest request, @RequestHeader("Authorization") String authorization) {
-        /*String token = authorization.replace("Bearer ", ""); // Token from header
+        String token = authorization.replace("Bearer ", ""); // Token from header
 
         List<String> roles = authServiceClient.getUserRoles(token);
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
             throw new RuntimeException("Unauthorized access");
         }
-
-         */
 
         BookCover bookCover = bookService.getBookCover(bookId);
         final Resource resource = new ByteArrayResource(bookCover.getImage());
@@ -171,7 +166,7 @@ public class BookController {
     @PostMapping("/{bookId}/cover")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UploadFileResponse> uploadFile(@PathVariable("bookId") final String bookId, @RequestParam("file") final MultipartFile file, @RequestHeader("Authorization") String authorization) throws URISyntaxException {
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Check permissions
@@ -180,7 +175,7 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         final UploadFileResponse up = bookService.doUploadFile(bookId, file);
         return ResponseEntity.created(new URI(up.getFileDownloadUri())).body(up);
@@ -190,7 +185,7 @@ public class BookController {
     @PutMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<BookView> createBook(@Valid @RequestPart("book") final CreateBookRequest resource, @RequestPart(value = "cover", required = false) MultipartFile coverPhoto, @RequestHeader("Authorization") String authorization) {
-       /* String token = authorization.replace("Bearer ", ""); // Token from header
+        String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Check permissions
         List<String> roles = authServiceClient.getUserRoles(token);
@@ -198,7 +193,6 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-        */
 
         final var book = bookService.createBook(resource, coverPhoto);
         final var newbarUri = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(book.getId().toString())
@@ -211,7 +205,7 @@ public class BookController {
     @Operation(summary = "Fully replaces an existing book")
     @PutMapping(path = "{bookId}")
     public ResponseEntity<BookView> updateBook(final WebRequest request, @PathVariable("bookId") Long id, @Valid @RequestBody final EditBookRequest resource, @RequestHeader("Authorization") String authorization) {
-      /*  String token = authorization.replace("Bearer ", ""); // Token from header
+        String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Check permissions
         List<String> roles = authServiceClient.getUserRoles(token);
@@ -219,7 +213,6 @@ public class BookController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-       */
 
         final String ifMatchValue = request.getHeader(IF_MATCH);
         if (ifMatchValue == null || ifMatchValue.isEmpty()) {
@@ -233,16 +226,13 @@ public class BookController {
     @Operation(summary = "Partially updates an existing book")
     @PatchMapping(path = "{bookId}")
     public ResponseEntity<BookView> partialUpdateBook(final WebRequest request, @PathVariable("bookId") Long id, @Valid @RequestBody final EditBookRequest resource, @RequestHeader("Authorization") String authorization) {
-        /*String token = authorization.replace("Bearer ", ""); // Token from header
+        String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Check permissions
         List<String> roles = authServiceClient.getUserRoles(token);
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
-         */
-
 
         final String ifMatchValue = request.getHeader(IF_MATCH);
         if (ifMatchValue == null || ifMatchValue.isEmpty()) {

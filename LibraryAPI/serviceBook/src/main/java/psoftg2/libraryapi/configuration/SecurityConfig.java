@@ -51,6 +51,15 @@ public class SecurityConfig {
 		// Enable CORS and disable CSRF
 		http = http.cors(Customizer.withDefaults()).csrf(csrf -> csrf.disable());
 
+		//Allow H2 in browser
+		http = http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
+				.headers(httpSecurityHeadersConfigurer -> {
+					httpSecurityHeadersConfigurer.frameOptions(frameOptionsConfig -> {
+						frameOptionsConfig.disable();
+					});
+				});
+		http.headers().frameOptions().disable();
+
 		// Set session management to stateless
 		http = http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

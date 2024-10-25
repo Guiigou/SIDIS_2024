@@ -22,7 +22,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import psoftg2.libraryapi.client.AuthServiceClient;
 import psoftg2.libraryapi.fileStorage.UploadFileResponse;
 import psoftg2.libraryapi.readerManagement.model.Reader;
 import psoftg2.libraryapi.readerManagement.model.ReaderPhoto;
@@ -46,6 +48,7 @@ public class ReaderController {
     private final ReaderViewMapper readerViewMapper;
     private final ReaderProfileViewMapper readerProfileViewMapper ;
     private final ReaderLentsViewMapper readerLentsViewMapper;
+    private final AuthServiceClient authServiceClient;
 
     private boolean hasPermission(List<String> roles, String... allowedRoles) {
         for (String role : allowedRoles) {
@@ -62,7 +65,7 @@ public class ReaderController {
             schema = @Schema(implementation = ReaderProfileView.class)) })
     public ResponseEntity<ReaderProfileView> getReaderProfileWithQuote(@PathVariable("readerId") Long id, @RequestHeader("Authorization") String authorization) {
 
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -72,7 +75,7 @@ public class ReaderController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         var ReaderProfileView = readerProfileViewMapper.toReaderProfileView(readerService.getReaderByIdWithQuote(id).orElseThrow(() -> new NotFoundException(Reader.class, id)));
         return ResponseEntity.ok().body(ReaderProfileView);
@@ -89,17 +92,17 @@ public class ReaderController {
                                            @RequestParam(defaultValue = "100", required = false) int size,
                                            @RequestHeader("Authorization") String authorization) {
 
-        /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
 
-        if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        if (!hasPermission(roles, "LIBRARIAN", "ADMIN")) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
 
-         */
+
 
         Pageable pageable = PageRequest.of(page, size);
         Page<Reader> readersPage;
@@ -211,7 +214,7 @@ public class ReaderController {
     public ResponseEntity<Resource> getReaderPhoto(@PathVariable("readerId") final String readerId,
                                                  final HttpServletRequest request, @RequestHeader("Authorization") String authorization) {
 
-         /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -221,7 +224,6 @@ public class ReaderController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
 
         ReaderPhoto readerPhoto = readerService.getReaderPhoto(readerId);
 
@@ -240,7 +242,7 @@ public class ReaderController {
     public ResponseEntity<ReaderView> createReader(@Valid @RequestPart("reader") final EditReaderRequest resource,
                                                    @RequestPart(value = "photo", required = false) MultipartFile photo, @RequestHeader("Authorization") String authorization) {
 
-         /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -250,7 +252,7 @@ public class ReaderController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         Reader reader = readerService.createReader(resource, photo);
 
@@ -267,7 +269,7 @@ public class ReaderController {
     public ResponseEntity<UploadFileResponse> uploadFile(@PathVariable("readerId") final String readerId,
                                                          @RequestParam("file") final MultipartFile file, @RequestHeader("Authorization") String authorization) throws URISyntaxException {
 
-         /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -277,7 +279,7 @@ public class ReaderController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         final UploadFileResponse up = readerService.doUploadFile(readerId, file);
 
@@ -291,7 +293,7 @@ public class ReaderController {
                                                @PathVariable("readerId") Long id,
                                                @Valid @RequestBody final EditReaderRequest resource, @RequestHeader("Authorization") String authorization) {
 
-         /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -301,7 +303,7 @@ public class ReaderController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         final String ifMatchValue = request.getHeader(IF_MATCH);
         if (ifMatchValue == null || ifMatchValue.isEmpty()) {
@@ -317,7 +319,7 @@ public class ReaderController {
                                                       @PathVariable("readerId") Long id,
                                                       @Valid @RequestBody final EditReaderRequest resource, @RequestHeader("Authorization") String authorization) {
 
-         /*
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
@@ -327,7 +329,7 @@ public class ReaderController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         */
+
 
         final String ifMatchValue = request.getHeader(IF_MATCH);
         if (ifMatchValue == null || ifMatchValue.isEmpty()) {

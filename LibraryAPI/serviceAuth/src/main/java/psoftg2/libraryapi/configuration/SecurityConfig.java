@@ -83,6 +83,14 @@ public class SecurityConfig {
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+		//Allow H2 in browser
+		http = http.csrf(httpSecurityCsrfConfigurer -> httpSecurityCsrfConfigurer.disable())
+				.headers(httpSecurityHeadersConfigurer -> {
+					httpSecurityHeadersConfigurer.frameOptions(frameOptionsConfig -> {
+						frameOptionsConfig.disable();
+					});
+				});
+		http.headers().frameOptions().disable();
 		// Enable CORS and disable CSRF
 		http = http.cors(Customizer.withDefaults()).csrf(csrf -> csrf.disable());
 
@@ -96,12 +104,13 @@ public class SecurityConfig {
 
 		// Set permissions on endpoints
 		http.authorizeHttpRequests()
+				/*
 				// Swagger endpoints must be publicly accessible
 				.requestMatchers("/").permitAll().requestMatchers(format("%s/**", restApiDocPath)).permitAll()
 				.requestMatchers(format("%s/**", swaggerPath)).permitAll()
 				// Our public endpoints
 				.requestMatchers("/api/auth/**").permitAll() // public assets & end-points
-				/*
+
 				// Our private endpoints
 				.requestMatchers("/api/admin/user/**").hasRole(Role.ADMIN)
 				.anyRequest().authenticated()
