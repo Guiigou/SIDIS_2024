@@ -1,23 +1,26 @@
 @startuml
 ' https://plantuml.com/class-diagram
 
-hide circle
-
 title Vista Lógica Nível 1
 
 ' Definir o componente principal LMS
-component LMS
+component LMS {
+  portin reader
+  portin book
+  portin lending
+  portin auth
+}
 
-' Definir as "bolinhas" externas que representam os microserviços
-interface "Reader Service" as US
-interface "Book Service" as BS
-interface "Lending Service" as LS
-interface "Authentication Service" as AS
+' Definir os componentes dos microserviços
+interface "HTTP Reader API" as RS
+interface "HTTP Book API" as BS
+interface "HTTP Lending API" as LS
+interface "HTTP Authentication API" as AS
 
-' Colocar os microserviços em cima do LMS e conectá-los com linhas verticais retas para cima
-US -down- LMS
-BS -down- LMS
-LS -down- LMS
-AS -down- LMS
+' Conectar os microserviços às portas no componente LMS
+RS --> reader
+BS --> book
+LS --> lending
+AS --> auth
 
 @enduml
