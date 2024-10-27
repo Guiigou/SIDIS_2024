@@ -17,7 +17,7 @@ public class AuthServiceClient {
     }
 
     public List<String> getUserRoles(String token) {
-        String url = "http://localhost:8081/api/auth/roles"; // Alterar para endpoint que retorna roles baseado no token
+        String url = "http://service-auth:8081/api/auth/roles";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setBearerAuth(token); // Adiciona o token aqui

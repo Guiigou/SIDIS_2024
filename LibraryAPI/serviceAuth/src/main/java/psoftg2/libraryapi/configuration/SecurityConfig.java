@@ -104,17 +104,6 @@ public class SecurityConfig {
 
 		// Set permissions on endpoints
 		http.authorizeHttpRequests()
-				/*
-				// Swagger endpoints must be publicly accessible
-				.requestMatchers("/").permitAll().requestMatchers(format("%s/**", restApiDocPath)).permitAll()
-				.requestMatchers(format("%s/**", swaggerPath)).permitAll()
-				// Our public endpoints
-				.requestMatchers("/api/auth/**").permitAll() // public assets & end-points
-
-				// Our private endpoints
-				.requestMatchers("/api/admin/user/**").hasRole(Role.ADMIN)
-				.anyRequest().authenticated()
-				*/
 				.anyRequest().permitAll()
 				// Set up oauth2 resource server
 				.and().httpBasic(Customizer.withDefaults()).oauth2ResourceServer().jwt();

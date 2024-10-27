@@ -70,16 +70,7 @@ public class SecurityConfig {
 
 		// Set permissions on endpoints
 		http.authorizeHttpRequests()
-				/*.requestMatchers(HttpMethod.GET, "/api/books/**").permitAll()
-				.requestMatchers(HttpMethod.POST, "/api/books/**").permitAll()
-				.requestMatchers(HttpMethod.PUT, "/api/books/**").permitAll()
-				.requestMatchers(HttpMethod.PATCH, "/api/books/**").permitAll()
-				.requestMatchers(HttpMethod.GET, "/api/authors/**").permitAll()
-				.requestMatchers(HttpMethod.POST, "/api/authors/**").permitAll()
-				.requestMatchers(HttpMethod.PUT, "/api/authors/**").permitAll()
-				.requestMatchers(HttpMethod.PATCH, "/api/authors/**").permitAll()
-				.anyRequest().authenticated()
-				 */
+
 				.anyRequest().permitAll()
 				.and().httpBasic(Customizer.withDefaults()).oauth2ResourceServer().jwt();
 
