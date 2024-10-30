@@ -2,7 +2,7 @@ package psoftg2.libraryapi.lendingManagement.api;
 
 public class LentBookView {
     private Long bookId;
-    private Long lendCount; // Se você precisar também do número de empréstimos
+    private Long lendCount;
 
     // Construtor
     public LentBookView(Long bookId, Long lendCount) {

@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import psoftg2.libraryapi.client.AuthServiceClient;
+import psoftg2.libraryapi.client.LendingServiceClient;
 import psoftg2.libraryapi.fileStorage.UploadFileResponse;
 import psoftg2.libraryapi.readerManagement.model.Reader;
 import psoftg2.libraryapi.readerManagement.model.ReaderPhoto;
@@ -36,6 +37,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "Readers", description = "Endpoints for managing Readers")
 @RestController
@@ -49,6 +51,7 @@ public class ReaderController {
     private final ReaderProfileViewMapper readerProfileViewMapper ;
     private final ReaderLentsViewMapper readerLentsViewMapper;
     private final AuthServiceClient authServiceClient;
+    private final LendingServiceClient lendingServiceClient;
 
     private boolean hasPermission(List<String> roles, String... allowedRoles) {
         for (String role : allowedRoles) {
@@ -121,26 +124,27 @@ public class ReaderController {
 
         return  readersPage.map(readerViewMapper::toReaderView).getContent();
     }
-/*
+
     @Operation(summary = "Gets the Top 5 Readers")
     @GetMapping("/top-readers")
     @ApiResponse(description = "Success", content = { @Content(mediaType = "application/json",
             array = @ArraySchema(schema = @Schema(implementation = ReaderView.class))) })
-    public Iterable<ReaderView> getTopReaders(@RequestHeader("Authorization") String authorization) {
-         /*
+    public ResponseEntity<Iterable<ReaderView>> getTopReaders(@RequestHeader("Authorization") String authorization) {
+
         String token = authorization.replace("Bearer ", ""); // Token from header
 
         // Roles from AuthService
         List<String> roles = authServiceClient.getUserRoles(token);
-
         if (!hasPermission(roles, "LIBRARIAN", "ADMIN", "READER")) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
 
-         *//*
-        return readerViewMapper.toReaderView(readerService.getTopReaders(5));
+        List<ReaderView> readerViews = readerService.getTopReaders();
+
+        return ResponseEntity.ok(readerViews);
     }
-    */
+
+
 
     /*
     @Operation(summary = "Gets book suggestions based on reader's interest list")

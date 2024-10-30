@@ -75,4 +75,10 @@ public interface LendingRepository extends JpaRepository<Lending, Long> {
     List<Object[]> findAverageLendingDurationPerGenrePerMonth(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 
  */
+
+    @Query("SELECT l.readerId, COUNT(l.readerId) AS lendingCount " +
+            "FROM Lending l " +
+            "GROUP BY l.readerId " +
+            "ORDER BY lendingCount DESC")
+    List<Object[]> findTopReaders(Pageable pageable);
 }

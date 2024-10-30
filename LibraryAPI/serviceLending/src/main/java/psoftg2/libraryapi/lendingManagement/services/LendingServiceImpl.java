@@ -3,6 +3,7 @@ package psoftg2.libraryapi.lendingManagement.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import psoftg2.libraryapi.lendingManagement.api.*;
@@ -10,6 +11,7 @@ import psoftg2.libraryapi.exceptions.NotFoundException;
 import psoftg2.libraryapi.lendingManagement.model.Lending;
 import psoftg2.libraryapi.lendingManagement.repositories.LendingRepository;
 
+import java.security.cert.X509CRLEntry;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -187,6 +189,16 @@ public class LendingServiceImpl implements LendingService {
 
         return topBookIds.stream()
                 .map(record -> new LentBookView((Long) record[0], (Long) record[1]))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<LendingReaderView> getTopReaders() {
+        Pageable pageable = PageRequest.of(0, 5); // Define que queremos apenas os 5 primeiros resultados
+        List<Object[]> topReaders = lendingRepository.findTopReaders(pageable);
+
+        return topReaders.stream()
+                .map(record -> new LendingReaderView((Long) record[0], (Long) record[1]))
                 .collect(Collectors.toList());
     }
 

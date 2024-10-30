@@ -12,10 +12,10 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import psoftg2.libraryapi.bootstrapping.BootStrap;
+import psoftg2.libraryapi.client.LendingServiceClient;
 import psoftg2.libraryapi.exceptions.NotFoundException;
 import psoftg2.libraryapi.fileStorage.UploadFileResponse;
-import psoftg2.libraryapi.readerManagement.api.ReaderProfileViewMapper;
-import psoftg2.libraryapi.readerManagement.api.ReaderViewMapper;
+import psoftg2.libraryapi.readerManagement.api.*;
 import psoftg2.libraryapi.readerManagement.model.Reader;
 import psoftg2.libraryapi.readerManagement.model.ReaderPhoto;
 import psoftg2.libraryapi.readerManagement.repositories.ReaderPhotoRepository;
@@ -39,14 +39,17 @@ public class ReaderServiceImpl implements ReaderService {
     private final EditReaderMapper editReaderMapper;
     private final FileStorageService fileStorageService;
     private final ReaderPhotoRepository readerPhotoRepository;
-
+    private final LendingServiceClient lendingServiceClient;
+    private final ReaderViewMapperImpl readerViewMapper;
     @Autowired
-    public ReaderServiceImpl(ReaderRepository readerRepository, EditReaderMapper editReaderMapper, ReaderPhotoRepository readerPhotoRepository, FileStorageService fileStorageService, RestTemplate restTemplate) {
+    public ReaderServiceImpl(ReaderRepository readerRepository, EditReaderMapper editReaderMapper, ReaderPhotoRepository readerPhotoRepository, FileStorageService fileStorageService, RestTemplate restTemplate, LendingServiceClient lendingServiceClient, ReaderViewMapperImpl readerViewMapper) {
         this.readerRepository = readerRepository;
         this.editReaderMapper = editReaderMapper;
         this.fileStorageService = fileStorageService;
         this.readerPhotoRepository = readerPhotoRepository;
         this.restTemplate = restTemplate;
+        this.lendingServiceClient = lendingServiceClient;
+        this.readerViewMapper = readerViewMapper;
     }
 
     public Page<Reader> getReadersByName(final String name, Pageable pageable) {
@@ -67,15 +70,10 @@ public class ReaderServiceImpl implements ReaderService {
         readers.forEach(this::updateAge);
         return readers;
     }
-/*
-    public Iterable<Reader> getTopReaders(int topN) {
-        LocalDate endDate = LocalDate.now();
-        LocalDate startDate = endDate.minusYears(1);
-        List<Reader> readers = readerRepository.findTopReaders(PageRequest.of(0, topN), startDate, endDate);
-        readers.forEach(this::updateAge);
-        return readers;
-    }
 
+
+
+/*
     public Iterable<Reader> getTopReadersperGenre(int topN, Genre genre, LocalDate startDate, LocalDate endDate) {
         List<Reader> readers = readerRepository.findTopReadersPerGenre(PageRequest.of(0, topN), genre, startDate, endDate);
         readers.forEach(this::updateAge);
@@ -264,10 +262,39 @@ public class ReaderServiceImpl implements ReaderService {
         }
     }
 
+
     public List<String> getUserRolesFromAuthService(String username) {
         String authServiceUrl = "http://localhost:8081/api/auth/roles/" + username;
 
         ResponseEntity<String[]> response = restTemplate.getForEntity(authServiceUrl, String[].class);
         return Arrays.asList(response.getBody());
     }
+
+
+    @Override
+    public List<ReaderView> getTopReaders() {
+        // Obtém os top readers do microserviço Lending
+        List<LendingReaderView> topReaders = lendingServiceClient.getTopReaders();
+
+        // Para cada LendingReaderView, obtemos o Reader correspondente do repositório diretamente
+        List<Reader> readers = topReaders.stream()
+                .map(lendingReaderView -> getReaderById(lendingReaderView.getReaderId())
+                        .orElseThrow(() -> new NotFoundException(Reader.class, lendingReaderView.getReaderId())))
+                .collect(Collectors.toList());
+
+        // Convertemos a lista de Readers para ReaderView
+        Iterable<ReaderView> readerViewsIterable = readerViewMapper.toReaderView(readers);
+
+        // Converter Iterable para List
+        List<ReaderView> readerViews = new ArrayList<>();
+        readerViewsIterable.forEach(readerViews::add);
+
+        return readerViews;
+    }
+
+    private Optional<Reader> getReaderById(Long readerId) {
+        return readerRepository.findReaderById(readerId);
+    }
+
+
 }

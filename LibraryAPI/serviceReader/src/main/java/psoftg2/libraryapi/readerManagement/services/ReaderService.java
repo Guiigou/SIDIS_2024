@@ -4,10 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 import psoftg2.libraryapi.fileStorage.UploadFileResponse;
+import psoftg2.libraryapi.readerManagement.api.ReaderView;
 import psoftg2.libraryapi.readerManagement.model.Reader;
 import psoftg2.libraryapi.readerManagement.model.ReaderPhoto;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 public interface ReaderService {
@@ -26,4 +28,6 @@ public interface ReaderService {
     Reader updateReader(final Long id, final EditReaderRequest resource, final long desiredVersion);
     Reader partialUpdateReader(final Long id, final EditReaderRequest resource, final long desiredVersion);
     UploadFileResponse doUploadFile(final String id, final MultipartFile file);
+    public List<ReaderView> getTopReaders();
+
 }

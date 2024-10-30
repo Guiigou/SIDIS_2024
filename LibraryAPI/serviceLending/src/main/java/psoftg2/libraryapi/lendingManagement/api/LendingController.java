@@ -207,6 +207,13 @@ public class LendingController {
         List<LentBookView> topBooks = lendingService.getTopBooks();
         return ResponseEntity.ok(topBooks);
     }
+
+    @GetMapping("/top-readers")
+    public ResponseEntity<List<LendingReaderView>> getTopReaders() {
+
+        List<LendingReaderView> topReaders = lendingService.getTopReaders();
+        return ResponseEntity.ok(topReaders);
+    }
 }
 
 
