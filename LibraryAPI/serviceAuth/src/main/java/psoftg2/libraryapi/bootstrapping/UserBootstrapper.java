@@ -24,6 +24,8 @@ public class UserBootstrapper implements CommandLineRunner {
     @Override
     @Transactional
     public void run(final String... args) throws Exception {
+        System.out.println("Bootstrap profile is active");
+
         if (userRepo.findByUsername("admin1@mail.com").isEmpty()) {
             final User admin1 = new User("admin1@mail.com", encoder.encode("admin"), "Admin");
             admin1.addAuthority(new Role(Role.ADMIN));

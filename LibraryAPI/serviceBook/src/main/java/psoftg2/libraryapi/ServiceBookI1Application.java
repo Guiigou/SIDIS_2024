@@ -8,7 +8,7 @@ import org.springframework.core.env.AbstractEnvironment;
 public class ServiceBookI1Application {
 
     public static void main(String[] args) {
-        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "I1");
+        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "i1, bootstrap");
         SpringApplication.run(ServiceBookI1Application.class, args);
     }
 }

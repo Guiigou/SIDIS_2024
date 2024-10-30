@@ -5,10 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.env.AbstractEnvironment;
 
 @SpringBootApplication
-public class ServiceReaderI1Application {
+public class ServiceBookI2Application {
 
     public static void main(String[] args) {
-        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "I1");
-        SpringApplication.run(ServiceReaderI1Application.class, args);
+        System.setProperty(AbstractEnvironment.ACTIVE_PROFILES_PROPERTY_NAME, "i2, bootstrap");
+        SpringApplication.run(ServiceBookI2Application.class, args);
     }
 }
