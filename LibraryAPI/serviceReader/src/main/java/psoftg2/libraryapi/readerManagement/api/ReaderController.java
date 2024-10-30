@@ -10,16 +10,16 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -32,6 +32,7 @@ import psoftg2.libraryapi.readerManagement.model.ReaderPhoto;
 import psoftg2.libraryapi.readerManagement.services.EditReaderRequest;
 import psoftg2.libraryapi.readerManagement.services.ReaderServiceImpl;
 import psoftg2.libraryapi.exceptions.NotFoundException;
+import psoftg2.libraryapi.readerManagement.sync.SyncRequest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -45,6 +46,12 @@ import java.util.stream.Collectors;
 @RequestMapping(path = "api/readers")
 public class ReaderController {
 
+    @Value("${server.port}")
+    private String serverPort;
+    private static final String SYNC_URL_INSTANCE_1 = "http://localhost:8084/webhook/sync";
+    private static final String SYNC_URL_INSTANCE_2 = "http://localhost:8088/webhook/sync";
+
+
     private static final String IF_MATCH = "If-Match";
     private final ReaderServiceImpl readerService;
     private final ReaderViewMapper readerViewMapper;
@@ -52,6 +59,7 @@ public class ReaderController {
     private final ReaderLentsViewMapper readerLentsViewMapper;
     private final AuthServiceClient authServiceClient;
     private final LendingServiceClient lendingServiceClient;
+    private final RestTemplate restTemplate;
 
     private boolean hasPermission(List<String> roles, String... allowedRoles) {
         for (String role : allowedRoles) {
@@ -263,6 +271,9 @@ public class ReaderController {
         final var newbarUri = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(reader.getId().toString())
                 .build().toUri();
 
+        SyncRequest syncRequest = new SyncRequest(reader.getId(), "create");
+        sendSyncWebhook(syncRequest);
+
         return ResponseEntity.created(newbarUri).eTag(Long.toString(reader.getVersion()))
                 .body(readerViewMapper.toReaderView(reader));
     }
@@ -286,6 +297,10 @@ public class ReaderController {
 
 
         final UploadFileResponse up = readerService.doUploadFile(readerId, file);
+
+        Long readerIdLong = Long.parseLong(readerId);
+        SyncRequest syncRequest = new SyncRequest(readerIdLong, "update");
+        sendSyncWebhook(syncRequest);
 
         return ResponseEntity.created(new URI(up.getFileDownloadUri())).body(up);
 
@@ -314,6 +329,10 @@ public class ReaderController {
             return ResponseEntity.badRequest().build();
         }
         Reader reader = readerService.updateReader(id, resource, getVersionFromIfMatchHeader(ifMatchValue));
+
+        SyncRequest syncRequest = new SyncRequest(reader.getId(), "update");
+        sendSyncWebhook(syncRequest);
+
         return ResponseEntity.ok().eTag(Long.toString(reader.getVersion())).body(readerViewMapper.toReaderView(reader));
     }
 
@@ -340,6 +359,10 @@ public class ReaderController {
             return ResponseEntity.badRequest().build();
         }
         Reader reader = readerService.partialUpdateReader(id, resource, getVersionFromIfMatchHeader(ifMatchValue));
+
+        SyncRequest syncRequest = new SyncRequest(reader.getId(), "update");
+        sendSyncWebhook(syncRequest);
+
         return ResponseEntity.ok().eTag(Long.toString(reader.getVersion())).body(readerViewMapper.toReaderView(reader));
     }
 
@@ -350,4 +373,23 @@ public class ReaderController {
         return Long.parseLong(ifMatchHeader);
     }
 
+
+    private void sendSyncWebhook(SyncRequest syncRequest) {
+        try {
+            String targetSyncUrl = determineTargetSyncUrl(); // Obtenha a URL de sincronização correta
+            HttpEntity<SyncRequest> requestEntity = new HttpEntity<>(syncRequest);
+            restTemplate.exchange(targetSyncUrl, HttpMethod.POST, requestEntity, String.class);
+        } catch (HttpClientErrorException e) {
+            System.err.println("Erro ao enviar webhook de sincronização: " + e.getMessage());
+        }
+    }
+
+    private String determineTargetSyncUrl() {
+        // Determine a URL de sincronização com base na porta do servidor
+        if ("8084".equals(serverPort)) {
+            return SYNC_URL_INSTANCE_2; // Se for a instância 1, envia para a instância 2
+        } else {
+            return SYNC_URL_INSTANCE_1; // Se for a instância 2, envia para a instância 1
+        }
+    }
 }
