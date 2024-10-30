@@ -9,12 +9,17 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import psoftg2.libraryapi.client.AuthServiceClient;
@@ -23,6 +28,8 @@ import psoftg2.libraryapi.lendingManagement.services.CreateLendingRequest;
 import psoftg2.libraryapi.lendingManagement.services.EditLendingRequest;
 import psoftg2.libraryapi.lendingManagement.services.LendingServiceImpl;
 import psoftg2.libraryapi.exceptions.NotFoundException;
+import psoftg2.libraryapi.lendingManagement.sync.SyncRequest;
+
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,6 +40,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 @RequestMapping(path = "api/lendings")
 public class LendingController {
+
+    private final RestTemplate restTemplate;
+    @Value("${server.port}")
+    private String serverPort;
+    private static final String SYNC_URL_INSTANCE_1 = "http://localhost:8083/webhook/sync";
+    private static final String SYNC_URL_INSTANCE_2 = "http://localhost:8087/webhook/sync";
+
 
     private static final String IF_MATCH = "If-Match";
     private final LendingServiceImpl lendingService;
@@ -164,6 +178,11 @@ public class LendingController {
         final var newbarUri = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(lending.getId().toString())
                 .build().toUri();
 
+        //sync
+        SyncRequest syncRequest = new SyncRequest(lending.getId(), "return");
+        sendSyncWebhook(syncRequest);
+        //.
+
         return ResponseEntity.created(newbarUri).eTag(Long.toString(lending.getVersion()))
                 .body(lendingViewMapper.toLendingView(lending));
     }
@@ -186,6 +205,11 @@ public class LendingController {
 
         final var newbarUri = ServletUriComponentsBuilder.fromCurrentRequestUri().pathSegment(lending.getId().toString())
                 .build().toUri();
+
+        //sync
+        SyncRequest syncRequest = new SyncRequest(lending.getId(), "return");
+        sendSyncWebhook(syncRequest);
+        //.
 
         return ResponseEntity.created(newbarUri).eTag(Long.toString(lending.getVersion()))
                 .body(lendingViewMapper.toLendingView(lending));
@@ -213,6 +237,27 @@ public class LendingController {
 
         List<LendingReaderView> topReaders = lendingService.getTopReaders();
         return ResponseEntity.ok(topReaders);
+    }
+
+    //sync
+    private void sendSyncWebhook(SyncRequest syncRequest) {
+        try {
+            String targetSyncUrl = determineTargetSyncUrl(); // Obtenha a URL de sincronização correta
+            HttpEntity<SyncRequest> requestEntity = new HttpEntity<>(syncRequest);
+            restTemplate.exchange(targetSyncUrl, HttpMethod.POST, requestEntity, String.class);
+        } catch (HttpClientErrorException e) {
+            System.err.println("Erro ao enviar webhook de sincronização: " + e.getMessage());
+        }
+    }
+
+    // Método que determina para qual instância a sincronização deve ser enviada
+    private String determineTargetSyncUrl() {
+        // Determine a URL de sincronização com base na porta do servidor
+        if ("8083".equals(serverPort)) {
+            return SYNC_URL_INSTANCE_2; // Se for a instância 1, envia para a instância 2
+        } else {
+            return SYNC_URL_INSTANCE_1; // Se for a instância 2, envia para a instância 1
+        }
     }
 }
 
