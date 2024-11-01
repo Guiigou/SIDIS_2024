@@ -1,6 +1,6 @@
 # Definir o diretório base como o local onde o script está a ser executado
 $scriptDir = (Get-Location).Path
-$baseDir = Join-Path $scriptDir "LibraryAPI"
+$baseDir = $scriptDir
 
 # Caminho do JAR do H2 (verificar se o ficheiro existe)
 $h2Jar = "h2-2.3.232.jar"
